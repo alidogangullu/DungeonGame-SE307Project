@@ -25,37 +25,89 @@ namespace SE307Project
         protected int Value { get; set; }
         protected FactionType Faction { get; set; }
         protected ElementType Element { get; set; }
+        // for sorting other items according to date
         private DateTime Date { get; set; }
-        
+
+        public Item(String name, int value)
+        {
+            Date = DateTime.Now;
+            Name = name;
+            Value = value;
+        }
+
+        public Item(String name, int value, FactionType faction, ElementType element)
+        {
+            Date = DateTime.Now;
+            Name = name;
+            Value = value;
+        }
     }
 
     public class Potion : Item
     {
         private double Amount { get; set; }
 
+        public Potion(String name, double amount, int value) : base(name, value)
+        {
+            Amount = amount;
+            
+        }
         public void Heal(Character c)
         {
-            
+            if (null != c)
+            {
+                // Adds amount, every specific character handles its setHealth method
+                double mageHealth = c.CalculateHealthPoint();
+                mageHealth += Amount;
+                c.SetHealth(mageHealth);
+            }
         }
     }
     
     public class Weapon : Item
     {
-        private double Amount { get; set; }
-
+        private double Damage { get; set; }
+        public Weapon(String name, int val, FactionType factionType, ElementType elementType) :
+            base(name, val,factionType,elementType)
+        {
+            Name = name;
+            Value = val;
+            Faction = factionType;
+            Element = elementType;
+        }
         public double CalculateDamage()
         {
-            return Amount;
+            return Damage;
         }
     }
     
     public class Cloth : Item
     {
-        private double Amount { get; set; }
+        private double Defence { get; set; }
 
+        public Cloth(String name, int val, FactionType factionType, ElementType elementType) :
+            base(name, val,factionType,elementType)
+        {
+            Name = name;
+            Value = val;
+            Faction = factionType;
+            Element = elementType;
+        }
         public double CalculateDefence()
         {
-            return Amount;
+            return Defence;
         }
     }
+    
+    // used later
+    /*public class NullCharacterException : Exception
+    {
+        public void getMessage()
+        {
+            var color = Console.BackgroundColor;
+            Console.BackgroundColor = ConsoleColor.Blue;
+            Console.WriteLine("Character is null, please provide correct character!");
+            Console.BackgroundColor = color;
+        }
+    }*/
 }
