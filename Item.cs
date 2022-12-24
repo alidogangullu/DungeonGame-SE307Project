@@ -40,6 +40,8 @@ namespace SE307Project
             Date = DateTime.Now;
             Name = name;
             Value = value;
+            Faction = faction;
+            Element = element;
         }
     }
 
@@ -67,13 +69,10 @@ namespace SE307Project
     public class Weapon : Item
     {
         private double Damage { get; set; }
-        public Weapon(String name, int val, FactionType factionType, ElementType elementType) :
+        public Weapon(String name, int val, FactionType factionType, ElementType elementType,double damage) :
             base(name, val,factionType,elementType)
         {
-            Name = name;
-            Value = val;
-            Faction = factionType;
-            Element = elementType;
+            Damage = damage;
         }
         public double CalculateDamage()
         {
@@ -85,13 +84,10 @@ namespace SE307Project
     {
         private double Defence { get; set; }
 
-        public Cloth(String name, int val, FactionType factionType, ElementType elementType) :
+        public Cloth(String name, int val, FactionType factionType, ElementType elementType, double defence) :
             base(name, val,factionType,elementType)
         {
-            Name = name;
-            Value = val;
-            Faction = factionType;
-            Element = elementType;
+            Defence = defence;
         }
         public double CalculateDefence()
         {
