@@ -4,6 +4,7 @@ using System.Text;
 
 namespace SE307Project
 {
+    [Serializable]
     public class Mage : Character
     {
         private const double MaxHealth = 100.0;

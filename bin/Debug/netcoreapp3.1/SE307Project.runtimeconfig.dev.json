@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\alido\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\alido\\.nuget\\packages"
+    ]
+  }
+}

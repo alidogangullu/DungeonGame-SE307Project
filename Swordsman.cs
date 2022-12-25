@@ -4,6 +4,7 @@ using System.Text;
 
 namespace SE307Project
 {
+    [Serializable]
     public class SwordsMan : Character
     {
         private const double MaxHealth = 125.0;

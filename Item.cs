@@ -19,6 +19,8 @@ namespace SE307Project
         Water,
         Normal
     }
+    
+    [Serializable]
     public class Item
     {
         protected String Name { get; set; }

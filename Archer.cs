@@ -4,6 +4,7 @@ using System.Text;
 
 namespace SE307Project
 {
+    [Serializable]
     public class Archer : Character
     {
         private const double MaxHealth = 85.0;

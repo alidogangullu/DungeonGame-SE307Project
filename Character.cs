@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace SE307Project
 {
+    [Serializable]
     public abstract class Character
     {
         protected double HealthPoint;
