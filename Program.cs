@@ -36,7 +36,7 @@ namespace SE307Project
             
             currentUser.SaveGame();
             
-            Level level = new Level();
+            Level level = new Level(currentUser);
             level.GenerateLevel();
 
             int choice = 0;

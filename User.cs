@@ -13,8 +13,8 @@ namespace SE307Project
         private List<Character> CharacterList { get; set; }
         private Character currentCharacter { get; set; }
         private List<int> ScoreList { get; set; }
-        
-        private int lastCheckpointLvl { get; set; }
+
+        public int lastCheckpointLvl { get; set; }
 
         public User(long UserID)
         {

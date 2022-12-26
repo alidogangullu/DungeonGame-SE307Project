@@ -11,10 +11,14 @@ namespace SE307Project
         private List<Room> RoomList { get; set; }
         public int CurrentRoom { get; set; }
 
-        public Level()
+        public Level(User currentUser)
         {
             RoomList = new List<Room>();
             LevelNumber = 0;
+            if (currentUser.lastCheckpointLvl > LevelNumber)
+            {
+                LevelNumber = currentUser.lastCheckpointLvl;
+            }
         }
         
         public void GenerateLevel()
