@@ -6,21 +6,82 @@ namespace SE307Project
     public class Level
     {
         //TODO: When its public static also you can change its value (cheat) we need to change that somehow ???
-        public static int Number;
-        private Dictionary<int, List<Room>> RoomList { get; set; }
-        private int CurrentRoom { get; set; }
+        //name change for understandability
+        public static int LevelNumber;
+        private List<Room> RoomList { get; set; }
+        public int CurrentRoom { get; set; }
 
         public Level()
         {
-            RoomList = new Dictionary<int, List<Room>>();
+            RoomList = new List<Room>();
+            LevelNumber = 0;
         }
         
-        private void GenerateLevel()
+        public void GenerateLevel()
         {
+            LevelNumber++;
+            RoomList.Clear();
+            
+            // Generate a random number of rooms for the level
+            int numRooms = new Random().Next(5, 10);
+
+            //some difficulty logic
+            for (int i = 0; i < numRooms*(LevelNumber/2); i++)
+            {
+                // Create a new room and add it to the RoomList list
+                Room room = new Room(i);
+                RoomList.Add(room);
+
+                // Generate monsters for the room
+                room.GenerateMonsters();
+            }
+        }
         
+        public void MoveToNextRoom()
+        {
+            Console.WriteLine("Current room: {0}", CurrentRoom);
+
+            // Check if there are any more rooms in the level
+            if (CurrentRoom + 1 < RoomList.Count)
+            {
+                CurrentRoom++;
+            }
+            else
+            {
+                //TODO: remove monsters from list when they are killed.
+                if (RoomList[CurrentRoom].Monsters.Count==0)
+                {
+                    // If there are no more rooms and monsters, generate a new level
+                    GenerateLevel();
+                    CurrentRoom = 0;
+
+                }
+            }
+            Console.WriteLine("Next room: {0}", CurrentRoom);
+        }
+        
+        public void MoveToPreviousRoom()
+        {
+            Console.WriteLine("Current room: {0}", CurrentRoom);
+
+            // Check if there are any more rooms in the level
+            if (CurrentRoom - 1 >= 0)
+            {
+                CurrentRoom--;
+            }
+            else
+            {
+                // If there are no more rooms, generate a new level
+                GenerateLevel();
+                CurrentRoom = RoomList.Count - 1;
+            }
+
+            Console.WriteLine("Previous room: {0}", CurrentRoom);
+        }
+        
+        public Room GetCurrentRoom()
+        {
+            return RoomList[CurrentRoom];
         }
     }
-    
-    
-
 }

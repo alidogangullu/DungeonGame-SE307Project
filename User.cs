@@ -14,7 +14,7 @@ namespace SE307Project
         private Character currentCharacter { get; set; }
         private List<int> ScoreList { get; set; }
         
-        private int lastCheckpointLvl { get; set; } //i think we need in the future to save and load game.
+        private int lastCheckpointLvl { get; set; }
 
         public User(long UserID)
         {
@@ -85,6 +85,9 @@ namespace SE307Project
 
         public void SaveGame()
         {
+            //save last finished level's number
+            lastCheckpointLvl = Level.LevelNumber;
+            
             // Open the file
             using FileStream fs = new FileStream(Directory.GetCurrentDirectory()+@"\users\"+ID + ".bin", FileMode.Create);
             

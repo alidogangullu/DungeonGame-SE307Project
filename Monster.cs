@@ -20,8 +20,6 @@ namespace SE307Project
     
     public class Monster
     {
-        // why do we have name ?? we have monster type to represent monster's name
-        public String Name { get; set; }
         public double HealthPoint { get; set; }
         public ElementType Element { get; set; }
         public MonsterType MType { get; set; }
@@ -29,9 +27,15 @@ namespace SE307Project
         public int BaseDamage { get;  private set; }
         public List<Item> EquippedItems { get; private set; }
 
-        public Monster(MonsterType monsterType)
+        public Monster()
         {
-            MType = monsterType;
+            //Randomized Monster creation without any constructor parameter.
+            Random random = new Random();
+            MonsterType[] values = (MonsterType[])Enum.GetValues(typeof(MonsterType));
+            int index = random.Next(values.Length);
+            MonsterType randomMonster = values[index];
+            MType = randomMonster;
+            
             CalculateBaseDamage();
             GenerateItems();
         }
@@ -45,33 +49,33 @@ namespace SE307Project
             {
                 case MonsterType.Skeleton:
                     Element = ElementType.Dark;
-                    BaseDamage = Level.Number * random.Next(5, 7) ;
-                    HealthPoint = Level.Number * random.Next(10, 21);
+                    BaseDamage = Level.LevelNumber * random.Next(5, 7) ;
+                    HealthPoint = Level.LevelNumber * random.Next(10, 21);
                     break;
                 case MonsterType.Undead:
                     Element = ElementType.Dark;
-                    BaseDamage = Level.Number * random.Next(5, 9);
-                    HealthPoint = Level.Number * random.Next(15, 21);
+                    BaseDamage = Level.LevelNumber * random.Next(5, 9);
+                    HealthPoint = Level.LevelNumber * random.Next(15, 21);
                     break;
                 case MonsterType.Angel:
                     Element = ElementType.Holy;
-                    BaseDamage = Level.Number * random.Next(3, 6);
-                    HealthPoint = Level.Number * random.Next(20, 26);
+                    BaseDamage = Level.LevelNumber * random.Next(3, 6);
+                    HealthPoint = Level.LevelNumber * random.Next(20, 26);
                     break;
                 case MonsterType.Spirit:
                     Element = ElementType.Holy;
-                    BaseDamage = Level.Number * random.Next(10, 16);
-                    HealthPoint = Level.Number * random.Next(5, 11);
+                    BaseDamage = Level.LevelNumber * random.Next(10, 16);
+                    HealthPoint = Level.LevelNumber * random.Next(5, 11);
                     break;
                 case MonsterType.Imp:
                     Element = ElementType.Fire;
-                    BaseDamage = Level.Number * random.Next(7, 11);
-                    HealthPoint = Level.Number * random.Next(15, 21);
+                    BaseDamage = Level.LevelNumber * random.Next(7, 11);
+                    HealthPoint = Level.LevelNumber * random.Next(15, 21);
                     break;
                 case MonsterType.Naga:
                     Element = ElementType.Water;
-                    BaseDamage = Level.Number * random.Next(7, 11);
-                    HealthPoint = Level.Number * random.Next(20, 26);
+                    BaseDamage = Level.LevelNumber * random.Next(7, 11);
+                    HealthPoint = Level.LevelNumber * random.Next(20, 26);
                     break;
                 case MonsterType.Dragon:
                     int dragonElement = random.Next(1, 5);
@@ -88,28 +92,28 @@ namespace SE307Project
                     {
                         Element = ElementType.Normal;
                     }
-                    BaseDamage = Level.Number * random.Next(20, 41);
-                    HealthPoint = Level.Number * random.Next(60, 81);
+                    BaseDamage = Level.LevelNumber * random.Next(20, 41);
+                    HealthPoint = Level.LevelNumber * random.Next(60, 81);
                     break;
                 case MonsterType.Harpy:
                     Element = ElementType.Lightning;
-                    BaseDamage = Level.Number * random.Next(7, 11);
-                    HealthPoint = Level.Number * random.Next(20, 26);
+                    BaseDamage = Level.LevelNumber * random.Next(7, 11);
+                    HealthPoint = Level.LevelNumber * random.Next(20, 26);
                     break;
                 case  MonsterType.Snake:
                     Element = ElementType.Normal;
-                    BaseDamage = Level.Number * random.Next(3, 5);
-                    HealthPoint = Level.Number * random.Next(10, 21);
+                    BaseDamage = Level.LevelNumber * random.Next(3, 5);
+                    HealthPoint = Level.LevelNumber * random.Next(10, 21);
                     break;
                 case MonsterType.Tyrant:
                     Element = ElementType.Nature;
-                    BaseDamage = Level.Number  * random.Next(10, 21);
-                    HealthPoint = Level.Number * random.Next(30, 41);
+                    BaseDamage = Level.LevelNumber  * random.Next(10, 21);
+                    HealthPoint = Level.LevelNumber * random.Next(30, 41);
                     break;
                 case MonsterType.Phoenix:
                     Element = ElementType.Fire;
-                    BaseDamage = Level.Number * random.Next(10, 21);
-                    HealthPoint = Level.Number * random.Next(20, 41);
+                    BaseDamage = Level.LevelNumber * random.Next(10, 21);
+                    HealthPoint = Level.LevelNumber * random.Next(20, 41);
                     break;
             }
         }
@@ -139,6 +143,13 @@ namespace SE307Project
                 case ElementType.Water :
                     break;
             }
+        }
+
+        public void Description()
+        {
+            Console.WriteLine(MType);
+            Console.WriteLine(BaseDamage);
+            Console.WriteLine(HealthPoint);
         }
         
         public void Attack()

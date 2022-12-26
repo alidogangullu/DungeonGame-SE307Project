@@ -1,24 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SE307Project
 {
     public class Room
     {
-        private int Number { get; set; }
-        private List<Monster> Monsters { get; set; }
+        public int Number { get; set; }
+        public List<Monster> Monsters { get; set; }
         private List<Item> DroppedItems { get; set; }
 
-        public Room()
+        public Room(int number)
         {
+            Number = number;
             DroppedItems = new List<Item>();
             Monsters = new List<Monster>();
         }
 
-        private void GenerateMonster()
+        public void GenerateMonsters()
         {
+            Random random = new Random();
+            
+            int numMonsters = random.Next(1, 4);
 
+            for (int i = 0; i < numMonsters; i++)
+            {
+                // Create a new monster and add it to the Monsters list
+                Monster monster = new Monster();
+                Monsters.Add(monster);
+            }
         }
+
     }
+    
 }
