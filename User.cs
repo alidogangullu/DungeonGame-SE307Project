@@ -11,7 +11,7 @@ namespace SE307Project
     {
         private long ID { get; set; }
         private List<Character> CharacterList { get; set; }
-        private Character currentCharacter { get; set; }
+        public Character currentCharacter { get; set; }
         private List<int> ScoreList { get; set; }
 
         public int lastCheckpointLvl { get; set; }
@@ -69,6 +69,17 @@ namespace SE307Project
                     {
                         currentCharacter = CharacterList[input];
                         Console.WriteLine("You selected " + currentCharacter.GetType());
+                        //Item class FactionType attribute configuration  
+                        if (currentCharacter.GetType() == typeof(Mage))
+                        {
+                            Item.Faction = FactionType.Mage;
+                        }else if (currentCharacter.GetType() == typeof(Archer))
+                        {
+                            Item.Faction = FactionType.Archer;
+                        }else if (currentCharacter.GetType() == typeof(SwordsMan))
+                        {
+                            Item.Faction = FactionType.Swordsman;
+                        }
                     }
                     else
                     {

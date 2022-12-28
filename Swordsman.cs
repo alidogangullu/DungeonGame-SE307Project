@@ -21,6 +21,8 @@ namespace SE307Project
         private void DefineMagic()
         {
             
+            
+            
         }
 
         public void UseMagic()

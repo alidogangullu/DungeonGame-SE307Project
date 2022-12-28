@@ -25,7 +25,7 @@ namespace SE307Project
     {
         protected String Name { get; set; }
         protected int Value { get; set; }
-        protected FactionType Faction { get; set; }
+        public static FactionType Faction { get; set; }
         protected ElementType Element { get; set; }
         // for sorting other items according to date
         private DateTime Date { get; set; }
@@ -37,12 +37,11 @@ namespace SE307Project
             Value = value;
         }
 
-        public Item(String name, int value, FactionType faction, ElementType element)
+        public Item(String name, int value, ElementType element)
         {
             Date = DateTime.Now;
             Name = name;
             Value = value;
-            Faction = faction;
             Element = element;
         }
     }
@@ -51,7 +50,7 @@ namespace SE307Project
     {
         private double Amount { get; set; }
 
-        public Potion(String name, double amount, int value) : base(name, value)
+        public Potion(String name, int value, double amount) : base(name, value)
         {
             Amount = amount;
             
@@ -71,8 +70,8 @@ namespace SE307Project
     public class Weapon : Item
     {
         private double Damage { get; set; }
-        public Weapon(String name, int val, FactionType factionType, ElementType elementType,double damage) :
-            base(name, val,factionType,elementType)
+        public Weapon(String name, int val, ElementType elementType,double damage) :
+            base(name, val, elementType)
         {
             Damage = damage;
         }
@@ -86,8 +85,8 @@ namespace SE307Project
     {
         private double Defence { get; set; }
 
-        public Cloth(String name, int val, FactionType factionType, ElementType elementType, double defence) :
-            base(name, val,factionType,elementType)
+        public Cloth(String name, int val, ElementType elementType, double defence) :
+            base(name, val, elementType)
         {
             Defence = defence;
         }

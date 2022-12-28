@@ -77,6 +77,7 @@ namespace SE307Project
                 {
                     level.MoveToPreviousRoom();
                 }
+                Console.WriteLine(Level.LevelNumber);
 
             }
             

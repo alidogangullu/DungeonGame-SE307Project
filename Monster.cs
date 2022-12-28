@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace SE307Project
 {
@@ -42,7 +43,7 @@ namespace SE307Project
 
         private void CalculateBaseDamage()
         {
-            //Randomized because of replay-ability 
+            //Randomized health and damage because of replay-ability 
             Random random = new Random();
             //Base damage calculations dependent to the level 
             switch (MType)
@@ -100,7 +101,7 @@ namespace SE307Project
                     BaseDamage = Level.LevelNumber * random.Next(7, 11);
                     HealthPoint = Level.LevelNumber * random.Next(20, 26);
                     break;
-                case  MonsterType.Snake:
+                case MonsterType.Snake:
                     Element = ElementType.Normal;
                     BaseDamage = Level.LevelNumber * random.Next(3, 5);
                     HealthPoint = Level.LevelNumber * random.Next(10, 21);
@@ -120,28 +121,42 @@ namespace SE307Project
         // This method will generate items according to the level and monster's element type 
         private void GenerateItems()
         {
+            //TODO I will generate an item json file and its contents.
+            //using FileStream fs = new FileStream(Directory.GetCurrentDirectory()+@"\conf\items"+Level.LevelNumber+".data",FileMode.Open);
+            
+            
+            // method will read from item data
             Random random = new Random();
-            // if 0 comes there is no item 1 comes generate weapon if 2, generate cloth  
-            int val = random.Next(0,3);
-            // how should faction replace maybe there can be static function to get or when user starts automatically item fucntion is assigned
-            // Item item = new Item();
-            switch (Element)
+            int val = random.Next(0, 4);
+            int val2 = random.Next(0, 4);
+            if (val == 1 && (val2 == 2 || val2 == 0 || val2 == 3))
             {
-                case ElementType.Dark :
-                    
-                    break;
-                case ElementType.Fire :
-                    break;
-                case ElementType.Holy :
-                    break;
-                case ElementType.Lightning :
-                    break;
-                case ElementType.Nature :
-                    break;
-                case ElementType.Normal :
-                    break;
-                case ElementType.Water :
-                    break;
+                EquippedItems.Add(new Weapon("Weapon",0, Element, 0));
+            }
+            else if (val == 2 && (val2 == 1 || val2 == 0 || val2 == 3))
+            {
+                EquippedItems.Add(new Cloth("Armor",0, Element, 0));
+            }else if (val == 3 && (val2 == 0 || val2 == 1 || val2 == 2))
+            {
+                EquippedItems.Add(new Potion("Potion",0,0));
+            }
+            else if (val2 == 1 && val == 1)
+            {
+                EquippedItems.Add(new Weapon("Weapon",0, Element, 0));
+                EquippedItems.Add(new Potion("Potion",0,0));
+            }else if (val2 == 2 && val == 2)
+            {
+                EquippedItems.Add(new Cloth("Armor",0, Element, 0));
+                EquippedItems.Add(new Potion("Potion",0,0));
+            }else if (val2 == 3 && val == 3)
+            {
+                EquippedItems.Add(new Potion("Potion",0,0));
+                EquippedItems.Add(new Potion("Potion",0,0));
+            }else if (val2 == 0 && val == 0)
+            {
+                EquippedItems.Add(new Weapon("Weapon",0, Element, 0));
+                EquippedItems.Add(new Cloth("Armor",0, Element, 0));
+                EquippedItems.Add(new Potion("Potion",0,0));
             }
         }
 

@@ -30,7 +30,7 @@ namespace SE307Project
             int numRooms = new Random().Next(5, 10);
 
             //some difficulty logic
-            for (int i = 0; i < numRooms*(LevelNumber/2); i++)
+            for (int i = 0; i < numRooms; i++)
             {
                 // Create a new room and add it to the RoomList list
                 Room room = new Room(i);
@@ -72,12 +72,6 @@ namespace SE307Project
             if (CurrentRoom - 1 >= 0)
             {
                 CurrentRoom--;
-            }
-            else
-            {
-                // If there are no more rooms, generate a new level
-                GenerateLevel();
-                CurrentRoom = RoomList.Count - 1;
             }
 
             Console.WriteLine("Previous room: {0}", CurrentRoom);
