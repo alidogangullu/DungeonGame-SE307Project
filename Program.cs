@@ -45,6 +45,8 @@ namespace SE307Project
             {
                 // Get the current room
                 Room room = level.GetCurrentRoom();
+                
+                Console.Clear();
 
                 // Print the room number and the number of monsters in the room
                 Console.WriteLine("You are in room {0}", room.Number);
@@ -52,17 +54,23 @@ namespace SE307Project
 
                 foreach (Monster monster in room.Monsters)
                 {
-                    monster.Description();
+                    Console.WriteLine(monster.Description(room.Monsters.IndexOf(monster)));
                 }
 
+                
                 Console.WriteLine("Choose an option:");
                 Console.WriteLine("-1. Exit to menu");
                 Console.WriteLine("1. Move to the next room");
 
                 // Only print the previous room option if the current room is not the first room
-                if (level.CurrentRoom > 0)
+                if (level.GetCurrentRoom().Number > 0)
                 {
                     Console.WriteLine("2. Move to the previous room");
+                }
+                
+                if (level.GetCurrentRoom().Monsters.Count != 0)
+                {
+                    Console.WriteLine("3. Attack");
                 }
 
                 // Read the user's choice
@@ -73,12 +81,18 @@ namespace SE307Project
                 {
                     level.MoveToNextRoom();
                 }
-                else if (choice == 2 && level.CurrentRoom > 0)
+                else if (choice == 2 && level.GetCurrentRoom().Number > 0)
                 {
                     level.MoveToPreviousRoom();
                 }
+                
+                else if (choice == 3 && level.GetCurrentRoom().Monsters.Count != 0)
+                {
+                    currentUser.currentCharacter.Attack(level.GetCurrentRoom());
+                }
+                
                 Console.WriteLine(Level.LevelNumber);
-
+                
             }
             
             Console.WriteLine("You complete level " + Level.LevelNumber + "press '0' for save and exit, '-1' for exit without saving.");

@@ -9,7 +9,7 @@ namespace SE307Project
         //name change for understandability
         public static int LevelNumber;
         private List<Room> RoomList { get; set; }
-        public int CurrentRoom { get; set; }
+        private int CurrentRoom { get; set; }
 
         public Level(User currentUser)
         {

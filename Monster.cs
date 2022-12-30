@@ -38,7 +38,7 @@ namespace SE307Project
             MType = randomMonster;
             
             CalculateBaseDamage();
-            GenerateItems();
+            //GenerateItems();
         }
 
         private void CalculateBaseDamage()
@@ -160,11 +160,12 @@ namespace SE307Project
             }
         }
 
-        public void Description()
+        public String Description(int i)
         {
-            Console.WriteLine(MType);
-            Console.WriteLine(BaseDamage);
-            Console.WriteLine(HealthPoint);
+            String description = i+ "- " + MType + "\n" 
+                                 + "Monster Damage: " + BaseDamage + "\n"
+                                 + "Monster Health: "+HealthPoint;
+            return description;
         }
         
         public void Attack()
