@@ -11,7 +11,7 @@ namespace SE307Project
         protected double HealthPoint;
         protected double EnergyPoint { get; set; }
         protected List<Item> ItemList { get; set; }
-        protected int CriticalChance { get; set; }
+        // ability cooldown
         protected int Cooldown { get; set; }
         public Weapon Weapon { get; set; }
         public Cloth Cloth { get; set; }
@@ -38,42 +38,8 @@ namespace SE307Project
             
         }
 
-        public virtual void Attack(Monster monster)
-        {
-            
-            Form form = new Form();
+        public abstract void Attack(Monster monster);
+        
 
-            // Set the form's properties
-            form.Text = monster.MType.ToString();
-            
-
-            // Add a button to the form
-            Button button = new Button();
-            button.Text = "Attack "+monster.MType;
-            button.Location = new Point(100, 50);
-            button.AutoSize = true;
-            
-            /*button.Click += (sender, e) =>
-            {
-                room.Monsters.RemoveAt(choice);
-                form.Close();
-            };*/
-            
-            form.Controls.Add(button);
-            
-            // Create a new label
-            Label label = new Label();
-
-            // Set the label's properties
-            label.Text = monster.Description(1);
-            label.Location = new Point(100, 0);
-            label.AutoSize = true;
-
-            // Add the label to the form
-            form.Controls.Add(label);
-
-            // Start the GUI's message loop
-            Application.Run(form);
-        }
     }
 }

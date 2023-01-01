@@ -50,6 +50,7 @@ namespace SE307Project
             return Name + " Score :"+ Value ;
         }
     }
+    [Serializable]
     public class Potion : Item
     {
         public double Amount { get; set; }
@@ -67,7 +68,7 @@ namespace SE307Project
             return health += Amount;
         }
     }
-    
+    [Serializable]
     public class Weapon : Item
     {
         private double Damage { get; set; }
@@ -81,7 +82,7 @@ namespace SE307Project
             return Damage;
         }
     }
-    
+    [Serializable]
     public class Cloth : Item
     {
         private double Defence { get; set; }

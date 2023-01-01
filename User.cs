@@ -38,6 +38,7 @@ namespace SE307Project
                 if (input == 1)
                 {
                     CharacterList.Add(new Archer());
+                    //please choose ability
                 }
                 else if (input == 2)
                 {

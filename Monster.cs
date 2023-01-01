@@ -31,6 +31,7 @@ namespace SE307Project
 
         public Monster()
         {
+            EquippedItems = new List<Item>();
             //Randomized Monster creation without any constructor parameter.
             Random random = new Random();
             MonsterType[] values = (MonsterType[])Enum.GetValues(typeof(MonsterType));
@@ -122,22 +123,6 @@ namespace SE307Project
         // This method will generate items according to the level and monster's element type 
         private void GenerateItems()
         {
-            //TODO I will generate an item json file and its contents.
-            try
-            {
-                DirectoryInfo path = Directory.GetParent(Directory.GetCurrentDirectory());
-                DirectoryInfo debugPath = Directory.GetParent(path.FullName);
-                DirectoryInfo thirdPath = debugPath.Parent;
-                String healingData = File.ReadAllText(thirdPath.FullName+
-                                                      @"\conf\healing-potions.json");
-                Potion potions = JsonSerializer.Deserialize<Potion>(healingData);
-                Console.WriteLine(potions.Amount);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-
             List<Weapon> classW =selectWeaponForClass();
 
             List<Potion> myPotions = new List<Potion>();
