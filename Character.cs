@@ -31,7 +31,7 @@ namespace SE307Project
         {
 
         }
-        
+
 
         public virtual void UseMagic()
         {
@@ -39,7 +39,38 @@ namespace SE307Project
         }
 
         public abstract void Attack(Monster monster);
-        
 
+
+        public virtual void ShowItemList()
+        {
+            Console.WriteLine("---Inventory---");
+            foreach (Item item in ItemList)
+            {
+                Console.WriteLine(ItemList.IndexOf(item) + "- " + item.Name);
+            }
+
+            Console.WriteLine(" ");
+            Console.WriteLine("Select an item or '-1' to quit");
+            int choice = Convert.ToInt32(Console.ReadLine());
+
+            if (ItemList[choice].GetType() == typeof(Weapon))
+            {
+                ItemList.Add(this.Weapon);
+                this.Weapon = ItemList[choice] as Weapon;
+            }
+            
+            
+            else if (ItemList[choice].GetType() == typeof(Cloth))
+            {
+                ItemList.Add(this.Cloth);
+                this.Cloth = ItemList[choice] as Cloth;
+            }
+
+            else if (choice == -1)
+            {
+                
+            }
+        }
+        
     }
 }

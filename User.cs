@@ -23,7 +23,7 @@ namespace SE307Project
             ScoreList = new List<int>();
         }
         
-        public void ChooseCharacter()
+        private void ChooseCharacter()
         {
             void newCharacter()
             {
@@ -95,7 +95,7 @@ namespace SE307Project
             
         }
 
-        public void SaveGame()
+        private void SaveGame()
         {
             //save last finished level's number
             lastCheckpointLvl = Level.LevelNumber;
@@ -107,6 +107,93 @@ namespace SE307Project
             BinaryFormatter formatter = new BinaryFormatter();
             fs.Position = 0;
             formatter.Serialize(fs, this);
+        }
+
+        public void StartGame()
+        {
+            ChooseCharacter();
+            
+            SaveGame();
+            
+            Level level = new Level(this);
+            level.GenerateLevel();
+
+            int choice = 0;
+            
+            while (choice != -1)
+            {
+                // Get the current room
+                Room room = level.GetCurrentRoom();
+                
+                Console.Clear();
+
+                // Print the room number and the number of monsters in the room
+                Console.WriteLine("You are in room {0}", room.Number);
+                Console.WriteLine("There are {0} monsters in this room", room.Monsters.Count);
+
+                foreach (Monster monster in room.Monsters)
+                {
+                    Console.WriteLine(monster.Description(room.Monsters.IndexOf(monster)));
+                }
+
+                
+                Console.WriteLine("Choose an option:");
+                Console.WriteLine("0. Show Inventory");
+                Console.WriteLine("-1. Exit to menu");
+                Console.WriteLine("1. Move to the next room");
+
+                // Only print the previous room option if the current room is not the first room
+                if (level.GetCurrentRoom().Number > 0)
+                {
+                    Console.WriteLine("2. Move to the previous room");
+                }
+                
+                if (level.GetCurrentRoom().Monsters.Count != 0)
+                {
+                    Console.WriteLine("3. Attack");
+                }
+
+                // Read the user's choice
+                choice = int.Parse(Console.ReadLine());
+
+                if (choice == 0)
+                {
+                    currentCharacter.ShowItemList();
+                }
+
+                // Move to the next or previous room based on the user's choice
+                else if (choice == 1)
+                {
+                    level.MoveToNextRoom();
+                }
+                else if (choice == 2 && level.GetCurrentRoom().Number > 0)
+                {
+                    level.MoveToPreviousRoom();
+                }
+                
+                else if (choice == 3 && level.GetCurrentRoom().Monsters.Count != 0)
+                {
+                    foreach (Monster monster in room.Monsters)
+                    {
+                        monster.Description(room.Monsters.IndexOf(monster));
+                    }
+                    Console.WriteLine("Select a monster for Attack.");
+                    int mChoice = int.Parse(Console.ReadLine());
+                    currentCharacter.Attack(room.Monsters[mChoice]);
+                }
+                
+                Console.WriteLine(Level.LevelNumber);
+                
+            }
+            
+            Console.WriteLine("You complete level " + Level.LevelNumber + "press '0' for save and exit, '-1' for exit without saving.");
+            choice = int.Parse(Console.ReadLine());
+
+            if (choice == 0)
+            {
+                SaveGame();
+                //saves last completed level number, it can be used for difficulty (monsters and number of rooms calculations).
+            }
         }
 
         public void CreateUser()

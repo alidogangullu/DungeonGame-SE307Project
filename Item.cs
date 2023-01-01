@@ -22,7 +22,7 @@ namespace SE307Project
     [Serializable]
     public class Item
     {
-        protected String Name { get; set; }
+        public String Name { get; set; }
         protected int Value { get; set; }
         public static FactionType Faction { get; set; }
         protected ElementType Element { get; set; }
