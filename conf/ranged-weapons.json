@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Shortbow",
+    "score": 10,
+    "damageAmount": 10
+  },
+  {
+    "name": "Longbow",
+    "score": 15,
+    "damageAmount": 15
+  },
+  {
+    "name": "Crossbow",
+    "score": 20,
+    "damageAmount": 20
+  }
+]

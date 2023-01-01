@@ -13,7 +13,8 @@ namespace SE307Project
         protected List<Item> ItemList { get; set; }
         protected int CriticalChance { get; set; }
         protected int Cooldown { get; set; }
-
+        public Weapon Weapon { get; set; }
+        public Cloth Cloth { get; set; }
         public Character()
         {
             ItemList = new List<Item>();
@@ -37,34 +38,26 @@ namespace SE307Project
             
         }
 
-        public virtual void Attack(Room room)
+        public virtual void Attack(Monster monster)
         {
-            
-            foreach (Monster monster in room.Monsters)
-            {
-                monster.Description(room.Monsters.IndexOf(monster));
-            }
-            
-            Console.WriteLine("Select a monster for Attack.");
-            int choice = int.Parse(Console.ReadLine());
             
             Form form = new Form();
 
             // Set the form's properties
-            form.Text = room.Monsters[choice].MType.ToString();
+            form.Text = monster.MType.ToString();
             
 
             // Add a button to the form
             Button button = new Button();
-            button.Text = "Attack "+room.Monsters[choice].MType;
+            button.Text = "Attack "+monster.MType;
             button.Location = new Point(100, 50);
             button.AutoSize = true;
             
-            button.Click += (sender, e) =>
+            /*button.Click += (sender, e) =>
             {
                 room.Monsters.RemoveAt(choice);
                 form.Close();
-            };
+            };*/
             
             form.Controls.Add(button);
             
@@ -72,7 +65,7 @@ namespace SE307Project
             Label label = new Label();
 
             // Set the label's properties
-            label.Text = room.Monsters[choice].Description(choice);
+            label.Text = monster.Description(1);
             label.Location = new Point(100, 0);
             label.AutoSize = true;
 

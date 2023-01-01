@@ -29,9 +29,9 @@ namespace SE307Project
 
         }
 
-        public void Attack()
+        public override void Attack(Monster monster)
         {
-
+            base.Attack(monster);
         }
 
         public override double CalculateHealthPoint()

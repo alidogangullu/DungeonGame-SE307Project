@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 
 namespace SE307Project
 {
@@ -38,7 +39,7 @@ namespace SE307Project
             MType = randomMonster;
             
             CalculateBaseDamage();
-            //GenerateItems();
+            GenerateItems();
         }
 
         private void CalculateBaseDamage()
@@ -122,8 +123,37 @@ namespace SE307Project
         private void GenerateItems()
         {
             //TODO I will generate an item json file and its contents.
-            //using FileStream fs = new FileStream(Directory.GetCurrentDirectory()+@"\conf\items"+Level.LevelNumber+".data",FileMode.Open);
+            try
+            {
+                DirectoryInfo path = Directory.GetParent(Directory.GetCurrentDirectory());
+                DirectoryInfo debugPath = Directory.GetParent(path.FullName);
+                DirectoryInfo thirdPath = debugPath.Parent;
+                String healingData = File.ReadAllText(thirdPath.FullName+
+                                                      @"\conf\healing-potions.json");
+                Potion potions = JsonSerializer.Deserialize<Potion>(healingData);
+                Console.WriteLine(potions.Amount);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            List<Weapon> classW =selectWeaponForClass();
+
+            List<Potion> myPotions = new List<Potion>();
+            myPotions.Add(new Potion("Potion of Minor Healing",10,10));
+            myPotions.Add(new Potion("Potion of Adequate Healing",15,20));
+            myPotions.Add(new Potion("Potion of Plentiful  Healing",20,40));
+            myPotions.Add(new Potion("Potion of Plentiful  Healing",25,60));
+            myPotions.Add(new Potion("Potion of Ultimate Healing",40,150));
             
+
+            List<Cloth> clothes = new List<Cloth>();
+            clothes.Add(new Cloth("Fine Scaled Armor",10,Element,10));
+            clothes.Add(new Cloth("Superior Scaled Armor",15,Element,15));
+            clothes.Add(new Cloth("Exquisite Scaled Armor",20,Element,20));
+            clothes.Add(new Cloth("Flawless Scaled Armor",25,Element,25));
+            clothes.Add(new Cloth("Legendary Scaled Armor",30,Element,30));
             
             // method will read from item data
             Random random = new Random();
@@ -131,35 +161,47 @@ namespace SE307Project
             int val2 = random.Next(0, 4);
             if (val == 1 && (val2 == 2 || val2 == 0 || val2 == 3))
             {
-                EquippedItems.Add(new Weapon("Weapon",0, Element, 0));
+                int weaponNo = random.Next(0, classW.Count);
+                EquippedItems.Add(classW[weaponNo]);
             }
             else if (val == 2 && (val2 == 1 || val2 == 0 || val2 == 3))
             {
-                EquippedItems.Add(new Cloth("Armor",0, Element, 0));
+                int cNo = random.Next(0, clothes.Count);
+                EquippedItems.Add(clothes[cNo]);
             }else if (val == 3 && (val2 == 0 || val2 == 1 || val2 == 2))
             {
-                EquippedItems.Add(new Potion("Potion",0,0));
+                int pNo = random.Next(0, myPotions.Count);
+                EquippedItems.Add(myPotions[pNo]);
             }
             else if (val2 == 1 && val == 1)
             {
-                EquippedItems.Add(new Weapon("Weapon",0, Element, 0));
-                EquippedItems.Add(new Potion("Potion",0,0));
+                int weaponNo = random.Next(0, classW.Count);
+                EquippedItems.Add(classW[weaponNo]);
+                int pNo = random.Next(0, myPotions.Count);
+                EquippedItems.Add(myPotions[pNo]);
             }else if (val2 == 2 && val == 2)
             {
-                EquippedItems.Add(new Cloth("Armor",0, Element, 0));
-                EquippedItems.Add(new Potion("Potion",0,0));
+                int cNo = random.Next(0, clothes.Count);
+                EquippedItems.Add(clothes[cNo]);
+                int pNo = random.Next(0, myPotions.Count);
+                EquippedItems.Add(myPotions[pNo]);
             }else if (val2 == 3 && val == 3)
             {
-                EquippedItems.Add(new Potion("Potion",0,0));
-                EquippedItems.Add(new Potion("Potion",0,0));
+                int pNo1 = random.Next(0, myPotions.Count);
+                EquippedItems.Add(myPotions[pNo1]);
+                int pNo2 = random.Next(0, myPotions.Count);
+                EquippedItems.Add(myPotions[pNo2]);
             }else if (val2 == 0 && val == 0)
             {
-                EquippedItems.Add(new Weapon("Weapon",0, Element, 0));
-                EquippedItems.Add(new Cloth("Armor",0, Element, 0));
-                EquippedItems.Add(new Potion("Potion",0,0));
+                int weaponNo = random.Next(0, classW.Count);
+                EquippedItems.Add(classW[weaponNo]);
+                int cNo = random.Next(0, clothes.Count);
+                EquippedItems.Add(clothes[cNo]);
+                int pNo = random.Next(0, myPotions.Count);
+                EquippedItems.Add(myPotions[pNo]);
             }
         }
-
+        
         public String Description(int i)
         {
             String description = i+ "- " + MType + "\n" 
@@ -168,14 +210,54 @@ namespace SE307Project
             return description;
         }
         
-        public void Attack()
+        public void Attack(Character enemy)
         {
-            
+            Random random = new Random();
+            var attackType = random.Next(1, 3);
+            // Normal Attack
+            if (attackType == 1)
+            {
+                Console.WriteLine("Normal Attack!");
+                enemy.SetHealth(enemy.CalculateHealthPoint()-BaseDamage);
+            }//Heavy Attack
+            else if (attackType == 2)
+            {
+                Console.WriteLine("Heavy Attack!");
+                enemy.SetHealth(enemy.CalculateHealthPoint()-BaseDamage*1.5);
+            }
         }
 
         public void DropItems(Room room)
         {
-            
+            foreach (Item equippedItem in EquippedItems)
+            {
+                room.DroppedItems.Add(equippedItem);
+            }
+        }
+
+        private List<Weapon> selectWeaponForClass()
+        {
+            List<Weapon> classWeapon = new List<Weapon>();
+            if (Item.Faction == FactionType.Archer)
+            {
+                classWeapon.Add(new Weapon("Shortbow",10,Element,10));
+                classWeapon.Add(new Weapon("Longbow",15,Element,15));
+                classWeapon.Add(new Weapon("Crossbow",20,Element,20));
+            }else if (Item.Faction == FactionType.Swordsman)
+            {
+                classWeapon.Add(new Weapon("Short Sword",10,Element,10));
+                classWeapon.Add(new Weapon("Battleaxe",15,Element,15));
+                classWeapon.Add(new Weapon("Dagger",5,Element,5));
+                classWeapon.Add(new Weapon("Mace",20,Element,20));
+                classWeapon.Add(new Weapon("Greatsword",25,Element,25));
+            }
+            else
+            {
+                classWeapon.Add(new Weapon("Wand",10,Element,10));
+                classWeapon.Add(new Weapon("Staff",15,Element,20));
+            }
+
+            return classWeapon;
         }
     }
     

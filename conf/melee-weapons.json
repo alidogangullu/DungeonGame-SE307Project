@@ -1,0 +1,28 @@
+[
+  {
+    "name": "Short Sword",
+    "score": 10,
+    "damageAmount": 10
+  },
+  {
+    "name": "Battleaxe",
+    "score": 15,
+    "damageAmount": 15
+  },
+  {
+    "name": "Dagger",
+    "score": 20,
+    "damageAmount": 5
+  },
+  {
+    "name": "Mace",
+    "score": 25,
+    "damageAmount": 20
+  },
+  {
+    "name": "Greatsword",
+    "score": 30,
+    "damageAmount": 25
+  }
+]
+

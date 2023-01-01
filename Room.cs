@@ -7,7 +7,7 @@ namespace SE307Project
     {
         public int Number { get; set; }
         public List<Monster> Monsters { get; set; }
-        private List<Item> DroppedItems { get; set; }
+        public List<Item> DroppedItems { get; set; }
 
         public Room(int number)
         {

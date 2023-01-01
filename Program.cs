@@ -88,7 +88,13 @@ namespace SE307Project
                 
                 else if (choice == 3 && level.GetCurrentRoom().Monsters.Count != 0)
                 {
-                    currentUser.currentCharacter.Attack(level.GetCurrentRoom());
+                    foreach (Monster monster in room.Monsters)
+                    {
+                        monster.Description(room.Monsters.IndexOf(monster));
+                    }
+                    Console.WriteLine("Select a monster for Attack.");
+                    int mChoice = int.Parse(Console.ReadLine());
+                    currentUser.currentCharacter.Attack(room.Monsters[mChoice]);
                 }
                 
                 Console.WriteLine(Level.LevelNumber);

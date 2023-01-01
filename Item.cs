@@ -19,7 +19,6 @@ namespace SE307Project
         Water,
         Normal
     }
-    
     [Serializable]
     public class Item
     {
@@ -30,6 +29,7 @@ namespace SE307Project
         // for sorting other items according to date
         private DateTime Date { get; set; }
 
+        public Item() {Date = DateTime.Now; } 
         public Item(String name, int value)
         {
             Date = DateTime.Now;
@@ -44,26 +44,27 @@ namespace SE307Project
             Value = value;
             Element = element;
         }
-    }
 
+        public override string ToString()
+        {
+            return Name + " Score :"+ Value ;
+        }
+    }
     public class Potion : Item
     {
-        private double Amount { get; set; }
+        public double Amount { get; set; }
 
+        public Potion() : base()
+        {
+            
+        }
         public Potion(String name, int value, double amount) : base(name, value)
         {
             Amount = amount;
-            
         }
-        public void Heal(Character c)
+        public double Heal(double health)
         {
-            if (null != c)
-            {
-                // Adds amount, every specific character handles its setHealth method
-                double mageHealth = c.CalculateHealthPoint();
-                mageHealth += Amount;
-                c.SetHealth(mageHealth);
-            }
+            return health += Amount;
         }
     }
     

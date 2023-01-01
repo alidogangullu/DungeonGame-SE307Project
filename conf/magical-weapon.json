@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Wand",
+    "score": 10,
+    "damageAmount": 10
+  },
+  {
+    "name": "Staff",
+    "score": 15,
+    "damageAmount": 20
+  }
+]

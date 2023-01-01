@@ -104,6 +104,7 @@ namespace SE307Project
             
             // Save this object
             BinaryFormatter formatter = new BinaryFormatter();
+            fs.Position = 0;
             formatter.Serialize(fs, this);
         }
 
@@ -160,5 +161,6 @@ namespace SE307Project
                 return null;
             }
         }
+        
     }
 }
