@@ -23,7 +23,7 @@ namespace SE307Project
     public class Item
     {
         public String Name { get; set; }
-        protected int Value { get; set; }
+        public int Value { get; set; }
         public static FactionType Faction { get; set; }
         public ElementType Element { get; set; }
         // for sorting other items according to date
@@ -71,7 +71,7 @@ namespace SE307Project
     [Serializable]
     public class Weapon : Item
     {
-        private double Damage { get; set; }
+        public double Damage { get; set; }
         public Weapon(String name, int val, ElementType elementType,double damage) :
             base(name, val, elementType)
         {

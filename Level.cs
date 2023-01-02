@@ -1,26 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SE307Project
 {
     public class Level
     {
-        //TODO: When its public static also you can change its value (cheat) we need to change that somehow ???
-        //name change for understandability
         public static int LevelNumber;
         public List<List<Room>> RoomList { get; set; }
         public int CurrentRoom { get; set; }
         public int CurrentCorridor { get; set; }
 
-        public Level(User currentUser)
+        public Level()
         {
             RoomList = new List<List<Room>>();
             LevelNumber = 0;
-            if (currentUser.lastCheckpointLvl > LevelNumber)
-            {
-                LevelNumber = currentUser.lastCheckpointLvl;
-            }
         }
         
         public void GenerateLevel()
@@ -38,7 +31,7 @@ namespace SE307Project
                 RoomList.Add(new List<Room>());
                 // Generate a random number of rooms for the floors
                 
-                int numRooms = new Random().Next(3, 5); //MINIMUM 3
+                int numRooms = new Random().Next(3, 5); //MINIMUM 3!
                 numRooms *= LevelNumber;
                 Math.Clamp(numRooms, 1, 10);
 
@@ -99,32 +92,79 @@ namespace SE307Project
                 Console.WriteLine("Go Down - S");
             }
 
-            String choice = Console.ReadLine().ToUpper();
-            
-            wrongChoice:
-            switch (choice)
+            int totalMonsterCount = 0;
+            foreach (List<Room> rooms in RoomList)
             {
-                   
-                case "A":
-                    CurrentRoom--;
-                    break;
-                case "D":
-                    CurrentRoom++;
-                    break;
-                case "W":
-                    var temp = RoomList[CurrentCorridor][CurrentRoom].corridorConnectionUp;
-                    CurrentCorridor--;
-                    CurrentRoom = temp;
-                    break;
-                case "S":
-                    var temp2 = RoomList[CurrentCorridor][CurrentRoom].corridorConnectionDown;
-                    CurrentCorridor++;
-                    CurrentRoom = temp2;
-                    break;
-                default:
-                    goto wrongChoice;
+                foreach (Room room in rooms)
+                {
+                    totalMonsterCount += room.Monsters.Count;
+                }
+            }
+            if (totalMonsterCount == 0)
+            {
+                Console.WriteLine("All monsters are killed in this level. Do you want to pass to new level? y or n");
+                String input = Console.ReadLine();
+                if (input.Equals("y"))
+                {
+                    GenerateLevel();
+                }
             }
             
+            wrongChoice:
+                
+            String choice = Console.ReadLine().ToUpper();
+            
+                switch (choice)
+                {
+                    case "A":
+                        if (CurrentRoom > 0)
+                        {
+                            CurrentRoom--;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Cannot move in that direction.");
+                        }
+                        break;
+                    case "D":
+                        if (CurrentRoom < RoomList[CurrentCorridor].Count - 1)
+                        {
+                            CurrentRoom++;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Cannot move in that direction.");
+                        }
+                        break;
+                    case "W":
+                        if (CurrentCorridor > 0)
+                        {
+                            var temp = RoomList[CurrentCorridor][CurrentRoom].corridorConnectionUp;
+                            CurrentCorridor--;
+                            CurrentRoom = temp;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Cannot move in that direction.");
+                        }
+                        break;
+                    case "S":
+                        if (CurrentCorridor < RoomList.Count - 1)
+                        {
+                            var temp2 = RoomList[CurrentCorridor][CurrentRoom].corridorConnectionDown;
+                            CurrentCorridor++;
+                            CurrentRoom = temp2;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Cannot move in that direction.");
+                        }
+                        break;
+                    default:
+                        Console.WriteLine("Wrong input, try again!");
+                        goto wrongChoice;
+                }
+                
         }
         
         public Room GetCurrentRoom()

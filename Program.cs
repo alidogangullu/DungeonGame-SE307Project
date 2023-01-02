@@ -10,15 +10,28 @@ namespace SE307Project
             
             User temp = new User(0);
             //we can call createUser, FindUser methods with using this temp.
-
-            long input;
+            
             User currentUser = null;
+            long input = 0;
             
             do
             {
                 Console.WriteLine("Enter a user ID to load game or " +
                                   "Enter '-1' to create new user.");
-                input = long.Parse(Console.ReadLine());
+                bool inputValid = false;
+
+                while (!inputValid)
+                {
+                    try
+                    {
+                        input = long.Parse(Console.ReadLine());
+                        inputValid = true;
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Wrong Input Try Again");
+                    }
+                }
                 
                 if (input == -1)
                 {
@@ -26,7 +39,23 @@ namespace SE307Project
                 }
                 else
                 {
-                    currentUser = temp.FindUser(input);
+                    try
+                    {
+                        currentUser = temp.FindUser(input);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    finally
+                    {
+                        if (currentUser == null)
+                        {
+                            Console.WriteLine("User not found.");
+                            input = -1;
+                        }
+                        
+                    }
+                    
                 }
 
             } while (input == -1 );

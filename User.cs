@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace SE307Project
@@ -28,26 +29,46 @@ namespace SE307Project
             void newCharacter()
             {
                 int input;
-                Console.WriteLine("Select Faction Type to create new character.");
-                Console.WriteLine("1- " + FactionType.Archer.ToString());
-                Console.WriteLine("2- " + FactionType.Mage.ToString());
-                Console.WriteLine("3- " + FactionType.Swordsman.ToString());
+                bool inputValid = false;
 
-                input = Convert.ToInt32(Console.ReadLine());
+                while (!inputValid)
+                {
+                    try
+                    {
+                        Console.WriteLine("Select Faction Type to create new character.");
+                        Console.WriteLine("1- " + FactionType.Archer.ToString());
+                        Console.WriteLine("2- " + FactionType.Mage.ToString());
+                        Console.WriteLine("3- " + FactionType.Swordsman.ToString());
 
-                if (input == 1)
-                {
-                    CharacterList.Add(new Archer());
-                    //please choose ability
+                        input = Convert.ToInt32(Console.ReadLine());
+
+                        if (input == 1)
+                        {
+                            CharacterList.Add(new Archer());
+                            inputValid = true;
+                        }
+                        else if (input == 2)
+                        {
+                            CharacterList.Add(new Mage());
+                            inputValid = true;
+                        }
+                        else if (input == 3)
+                        {
+                            CharacterList.Add(new SwordsMan());
+                            inputValid = true;
+                        }
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Wrong Input Try Again");
+                    }
+                    catch (OverflowException)
+                    {
+                        Console.WriteLine("Wrong Input Try Again");
+                    }
                 }
-                else if (input == 2)
-                {
-                    CharacterList.Add(new Mage());
-                }
-                else if (input == 3)
-                {
-                    CharacterList.Add(new SwordsMan());
-                }
+
+
             }
 
             int input = -1;
@@ -61,38 +82,78 @@ namespace SE307Project
                 {
                     foreach (Character character in CharacterList)
                     {
-                        Console.WriteLine(CharacterList.IndexOf(character) + " " + character.GetType().ToString());
+                        if (character.GetType() == typeof(Archer))
+                        {
+                            Console.WriteLine(CharacterList.IndexOf(character) + " Archer");
+                        }
+                        else if (character.GetType() == typeof(Mage))
+                        {
+                            Console.WriteLine(CharacterList.IndexOf(character) + " Mage");
+                        }
+                        else if (character.GetType() == typeof(SwordsMan))
+                        {
+                            Console.WriteLine(CharacterList.IndexOf(character) + " SwordsMan");
+                        }
+                        
                     }
 
-                    Console.WriteLine("Select a character or '-1' to create new.");
-                    input = Convert.ToInt32(Console.ReadLine());
-                    if (input != -1)
+                    bool inputValid = false;
+
+                    while (!inputValid)
                     {
-                        currentCharacter = CharacterList[input];
-                        Console.WriteLine("You selected " + currentCharacter.GetType());
-                        //Item class FactionType attribute configuration  
-                        if (currentCharacter.GetType() == typeof(Mage))
+                        Console.WriteLine("Select a character or '-1' to create new.");
+
+                        try
                         {
-                            Item.Faction = FactionType.Mage;
-                        }else if (currentCharacter.GetType() == typeof(Archer))
+                            input = Convert.ToInt32(Console.ReadLine());
+                            if (input<=CharacterList.Count-1)
+                            {
+                                inputValid = true;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Wrong Input, Try Again..");  
+                            }
+                        }
+                        catch (Exception)
                         {
-                            Item.Faction = FactionType.Archer;
-                        }else if (currentCharacter.GetType() == typeof(SwordsMan))
+                            Console.WriteLine("Wrong Input, Try Again..");   
+                        }
+
+                        if (input != -1 && inputValid)
                         {
-                            Item.Faction = FactionType.Swordsman;
+                            currentCharacter = CharacterList[input];
+                            Console.WriteLine("You selected " + currentCharacter.GetType());
+                            //Item class FactionType attribute configuration  
+                            if (currentCharacter.GetType() == typeof(Mage))
+                            {
+                                Item.Faction = FactionType.Mage;
+                            }
+                            else if (currentCharacter.GetType() == typeof(Archer))
+                            {
+                                Item.Faction = FactionType.Archer;
+                            }
+                            else if (currentCharacter.GetType() == typeof(SwordsMan))
+                            {
+                                Item.Faction = FactionType.Swordsman;
+                            }
+                        }
+                        else if(input == -1)
+                        {
+                            newCharacter();
                         }
                     }
-                    else
-                    {
-                        newCharacter();
-                    }
+
                 }
             } while (input == -1);
         }
         
         public void LoadGame()
         {
-            
+            if (lastCheckpointLvl > Level.LevelNumber)
+            {
+                Level.LevelNumber = lastCheckpointLvl;
+            }
         }
 
         private void SaveGame()
@@ -113,9 +174,10 @@ namespace SE307Project
         {
             ChooseCharacter();
             
-            SaveGame();
+            SaveGame(); //Save new characters.
+            LoadGame(); //Load lastCheckpointLvl.
             
-            Level level = new Level(this);
+            Level level = new Level();
             level.GenerateLevel();
 
             int choice = 0;
@@ -133,66 +195,167 @@ namespace SE307Project
                 }
 
                 // Print the room number and the number of monsters in the room
-                Console.WriteLine("You are in room {0}", level.CurrentRoom);
-                Console.WriteLine("You are in corridor {0}", level.CurrentCorridor);
-                
+                Console.WriteLine("--------------Level "+ Level.LevelNumber +"-------------------");
+                Console.WriteLine("You are in Room {0}", level.CurrentRoom);
+                Console.WriteLine("You are in Corridor {0}", level.CurrentCorridor);
                 Console.WriteLine("There are {0} monsters in this room", room.Monsters.Count);
+                Console.WriteLine("---------------------------------------------");
 
                 foreach (Monster monster in room.Monsters)
                 {
                     Console.WriteLine(monster.Description(room.Monsters.IndexOf(monster)));
                 }
 
-                
+                foreach (Item droppedItem in room.DroppedItems)
+                {
+                    Console.WriteLine(room.DroppedItems.IndexOf(droppedItem)+" "+droppedItem.Name);
+                }
+
+                Console.WriteLine("---------------------------------------------");
                 Console.WriteLine("Choose an option:");
+                Console.WriteLine("-1. Exit to menu");
                 Console.WriteLine("0. Show Inventory");
                 Console.WriteLine("1. Move");
-                Console.WriteLine("-1. Exit to menu");
-               
+
+                if (room.DroppedItems.Count > 0)
+                {
+                    Console.WriteLine("2. Add a dropped item to inventory");
+                }
                 
                 if (level.GetCurrentRoom().Monsters.Count != 0)
                 {
                     Console.WriteLine("3. Attack");
                 }
+                
+                Console.WriteLine("---------------------------------------------");
+                Console.WriteLine("Your Health: " + currentCharacter.HealthPoint);
+                Console.WriteLine("Your Energy: " + currentCharacter.EnergyPoint);
+                //TODO Console.WriteLine("Your Attack Damage: " + currentCharacter.Weapon.Damage);
+                Console.WriteLine("---------------------------------------------");
 
-                // Read the user's choice
-                choice = int.Parse(Console.ReadLine());
-
-                if (choice == 0)
+               
+                wrongChoice:
+                Boolean inptValid = false;
+                while (!inptValid)
                 {
-                    currentCharacter.ShowItemList();
-                }
-
-                // Move to the next or previous room based on the user's choice
-                else if (choice == 1)
-                {
-                    level.Movement();
-                }
-
-                else if (choice == 3 && level.GetCurrentRoom().Monsters.Count != 0)
-                {
-                    foreach (Monster monster in room.Monsters)
+                    try
                     {
-                        Console.WriteLine(monster.Description(room.Monsters.IndexOf(monster)));
+                        choice = int.Parse(Console.ReadLine());
+                        inptValid = true;
                     }
-                    Console.WriteLine("Select a monster for Attack.");
-                    int mChoice = int.Parse(Console.ReadLine());
-                    bool isWon = currentCharacter.Attack(room.Monsters[mChoice]);
-                    // drop items burda olması lazım
+                    catch (FormatException e)
+                    {
+                        Console.WriteLine("Wrong input, try again!");
+                    }
                 }
                 
-                Console.WriteLine(Level.LevelNumber);
-                
+                switch (choice)
+                {
+                    case 0:
+                        currentCharacter.ShowItemList();
+                        break;
+                    case 1:
+                        level.Movement();
+                        break;
+                    case 2:
+                    {
+                        Console.WriteLine("Enter an item index:");
+
+                        try
+                        {
+                            int itemNo = int.Parse(Console.ReadLine());
+
+                            if (currentCharacter.ItemList.Count >= currentCharacter.ItemList.Capacity)
+                            {
+                                Console.WriteLine("Full, you can not add this item!");
+                            }
+                            else
+                            {
+                                currentCharacter.ItemList.Add(room.DroppedItems[itemNo]);
+                            }
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine("Invalid input format. Please enter a valid integer.");
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            Console.WriteLine("Invalid item index. Please enter a valid index for an item in the list.");
+                        }
+                        
+                        break;
+                    }
+                    case 3 when level.GetCurrentRoom().Monsters.Count != 0:
+                    {
+                        foreach (Monster monster in room.Monsters)
+                        {
+                            Console.WriteLine(monster.Description(room.Monsters.IndexOf(monster)));
+                        }
+                        Console.WriteLine("Select a monster for Attack.");
+
+                        try
+                        {
+                            int mChoice = int.Parse(Console.ReadLine());
+                            bool isWon = currentCharacter.Attack(room.Monsters[mChoice]);
+
+                            if (isWon)
+                            {
+                                room.Monsters[mChoice].DropItems(room);
+                            }
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine("Invalid input format. Please enter a valid integer.");
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            Console.WriteLine("Invalid monster index. Please enter a valid index for a monster in the list.");
+                        }
+
+                        break;
+                    }
+                    default:
+                        Console.WriteLine("Wrong Input. Try Again.");
+                        goto wrongChoice;
+                }
+
             }
             
-            Console.WriteLine("You complete level " + Level.LevelNumber + "press '0' for save and exit, '-1' for exit without saving.");
-            choice = int.Parse(Console.ReadLine());
+            bool inputValid = false;
 
-            if (choice == 0)
+            while (!inputValid)
             {
-                SaveGame();
-                //saves last completed level number, it can be used for difficulty (monsters and number of rooms calculations).
+                Console.WriteLine("You complete level " + Level.LevelNumber +
+                                  "press '0' for save and exit, '-1' for exit without saving.");
+                try
+                {
+                    choice = int.Parse(Console.ReadLine());
+
+                    if (choice == 0)
+                    {
+                        inputValid = true;
+                        SaveGame();
+                        //saves last completed level number, it can be used for difficulty (monsters and generateLevel calculations).
+                    }
+
+                    else if (choice == -1)
+                    {
+                        inputValid = true;
+                    }
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Invalid input format. Please enter a valid integer.");
+                }
             }
+
+            int score = 0;
+            foreach (Item item in currentCharacter.ItemList)
+            {
+                score += item.Value;
+            }
+            
+            Console.WriteLine("Your total score is " + score);
         }
 
         public void CreateUser()
@@ -244,7 +407,6 @@ namespace SE307Project
             }
             else
             {
-                Console.WriteLine("User Not Found");
                 return null;
             }
         }
