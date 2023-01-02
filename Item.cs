@@ -115,14 +115,6 @@ namespace SE307Project
                 return isHeavy ? (Damage + Damage * ((percentage+20) / 100.0))*1.2 :
                     (Damage + Damage * ((percentage+20) / 100.0)) ;
             }
-            else if (Faction == FactionType.Swordsman && isSkill)
-            {
-                return  1 ;
-            }
-            else if (Faction == FactionType.Archer && isSkill)
-            {
-                
-            }
             return isHeavy ? (Damage + Damage * ((percentage) / 100.0))*1.2 :
                 (Damage + Damage * ((percentage) / 100.0)) ;
         }
