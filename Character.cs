@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 
 namespace SE307Project
 {
@@ -23,17 +25,67 @@ namespace SE307Project
         public abstract double CalculateEnergyPoint();
         public abstract void UseMagic();
         public abstract bool Attack(Monster monster);
+        
+        // Generates Timer and calculates how much time user passed given any input
+        public (int, String) Timer()
+        {
+            var keyInfo = new ConsoleKeyInfo();
+            var userInput = new StringBuilder();
+            var stopWatch = new Stopwatch();
+            var started = false;
 
-        public int Prediction(double predict, double exactValue)
+            do
+            {
+                keyInfo = Console.ReadKey(true);
+
+                if (started == false)
+                {
+                    stopWatch.Start();
+                    started = true;
+                }
+
+                if (keyInfo.Key == ConsoleKey.Backspace)
+                {
+                    Console.Write("\b \b");
+                    if(userInput.Length > 0) userInput.Remove(userInput.Length - 1, 1);
+                }
+                else if (keyInfo.Key == ConsoleKey.Enter)
+                {
+                    // Do nothing
+                }
+                else if(Char.IsLetter(keyInfo.KeyChar) ||
+                        Char.IsDigit(keyInfo.KeyChar) ||
+                        Char.IsWhiteSpace(keyInfo.KeyChar) ||
+                        Char.IsPunctuation(keyInfo.KeyChar))
+
+                {
+                    Console.Write(keyInfo.KeyChar);
+                    userInput.Append(keyInfo.KeyChar);
+                }
+            } while (keyInfo.Key != ConsoleKey.Enter);
+
+            stopWatch.Stop();
+            TimeSpan ts = stopWatch.Elapsed;
+
+            var finalString = userInput.ToString();
+
+            Console.WriteLine();
+
+            //Console.WriteLine($"String entered: {finalString}.");
+            //Console.WriteLine($"It took {ts.Seconds} seconds.");
+            
+            return (ts.Seconds, finalString) ;
+        }
+        public int Prediction(int predictionTime, double predict, double exactValue)
         {
             int isPredicted;
             double diff = Math.Abs(predict - exactValue);
             //Critical Chance
-            if (diff <= 1)
+            if (diff <= 0.5 && predictionTime <= 5)
             {
                 isPredicted = 2;
             }//Normal Damage
-            else if (1 < diff && diff <= 3)
+            else if (0.5 < diff && diff <= 1 )
             {
                 isPredicted = 1;
             }
@@ -41,6 +93,7 @@ namespace SE307Project
             {
                 isPredicted = 0;
             }
+            
 
             return isPredicted;
         }

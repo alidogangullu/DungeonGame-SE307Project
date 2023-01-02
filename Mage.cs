@@ -49,9 +49,11 @@ namespace SE307Project
                 
                 if (movement == 1)
                 {
-                    double formValue = 0;
+                    string formValue ;
+                    int time = 0;
                     double damage = Weapon.CalculateDamage(monster.Element, false,isMagicUsed);
-                    int isPredicted = Prediction(formValue,damage);
+                    (time,formValue) = Timer();
+                    int isPredicted = Prediction(time,Convert.ToDouble(formValue),damage);
                     // Checks whatever prediction is non-predicted, normal or critical respectively.
                     if (isPredicted == 0)
                     {
@@ -67,9 +69,11 @@ namespace SE307Project
                 }// heavy
                 else if (movement == 2 && EnergyPoint >= 40)
                 {
-                    double formValue = 0;
-                    double damage = Weapon.CalculateDamage(monster.Element, true,isMagicUsed);
-                    int isPredicted = Prediction(formValue,damage);
+                    string formValue ;
+                    int time = 0;
+                    double damage = Weapon.CalculateDamage(monster.Element, false,isMagicUsed);
+                    (time,formValue) = Timer();
+                    int isPredicted = Prediction(time,Convert.ToDouble(formValue),damage);
                     // Checks whatever prediction is non-predicted, normal or critical respectively.
                     if (isPredicted == 0)
                     {
