@@ -6,17 +6,27 @@ namespace SE307Project
     public class Room
     {
         public int Number { get; set; }
+        public int corridorConnectionUp { get; set; }
+        public int corridorConnectionDown { get; set; }
+        
+        public Boolean Left { get; set; }
+        public Boolean Right { get; set; }
         public List<Monster> Monsters { get; set; }
         public List<Item> DroppedItems { get; set; }
 
         public Room(int number)
         {
             Number = number;
+            corridorConnectionUp = -1;
+            corridorConnectionDown = -1;
+            Left = false;
+            Right = false;
             DroppedItems = new List<Item>();
             Monsters = new List<Monster>();
+            GenerateMonsters();
         }
-
-        public void GenerateMonsters()
+         
+        private void GenerateMonsters()
         {
             Random random = new Random();
             

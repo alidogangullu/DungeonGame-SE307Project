@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SE307Project
 {
@@ -8,12 +9,13 @@ namespace SE307Project
         //TODO: When its public static also you can change its value (cheat) we need to change that somehow ???
         //name change for understandability
         public static int LevelNumber;
-        private List<Room> RoomList { get; set; }
-        private int CurrentRoom { get; set; }
+        public List<List<Room>> RoomList { get; set; }
+        public int CurrentRoom { get; set; }
+        public int CurrentCorridor { get; set; }
 
         public Level(User currentUser)
         {
-            RoomList = new List<Room>();
+            RoomList = new List<List<Room>>();
             LevelNumber = 0;
             if (currentUser.lastCheckpointLvl > LevelNumber)
             {
@@ -26,60 +28,108 @@ namespace SE307Project
             LevelNumber++;
             RoomList.Clear();
             
-            // Generate a random number of rooms for the level
-            int numRooms = new Random().Next(5, 10);
+            int numFloors = new Random().Next(1, 3);
+            numFloors *= LevelNumber;
 
-            //some difficulty logic
-            for (int i = 0; i < numRooms; i++)
+            int roomNumberToGoDown = 0;
+            
+            for (int i = 0; i < numFloors; i++)
             {
-                // Create a new room and add it to the RoomList list
-                Room room = new Room(i);
-                RoomList.Add(room);
+                RoomList.Add(new List<Room>());
+                // Generate a random number of rooms for the floors
+                
+                int numRooms = new Random().Next(3, 5); //MINIMUM 3
+                numRooms *= LevelNumber;
+                Math.Clamp(numRooms, 1, 10);
 
-                // Generate monsters for the room
-                room.GenerateMonsters();
-            }
-        }
-        
-        public void MoveToNextRoom()
-        {
-            Console.WriteLine("Current room: {0}", CurrentRoom);
-
-            // Check if there are any more rooms in the level
-            if (CurrentRoom + 1 < RoomList.Count)
-            {
-                CurrentRoom++;
-            }
-            else
-            {
-                //TODO: remove monsters from list when they are killed.
-                if (RoomList[CurrentRoom].Monsters.Count==0)
+                for (int j = 0; j < numRooms; j++)
                 {
-                    // If there are no more rooms and monsters, generate a new level
-                    GenerateLevel();
-                    CurrentRoom = 0;
-
+                    RoomList[i].Add(new Room(j));
+                    if (j == 0)
+                    {
+                        RoomList[i][j].Right = true;
+                    }
+                    else if (j == numRooms-1)
+                    {
+                        RoomList[i][j].Left = true;
+                    }
+                    else
+                    {
+                        RoomList[i][j].Left = true;
+                        RoomList[i][j].Right = true;
+                    }
                 }
+
+                if (i==0)
+                {
+                    roomNumberToGoDown = new Random().Next(0, RoomList[i].Count);
+                }
+                else
+                {
+                    var middleRandom = new Random().Next(0, RoomList[i].Count);
+                    RoomList[i][middleRandom].corridorConnectionUp = roomNumberToGoDown;
+                    RoomList[i - 1][roomNumberToGoDown].corridorConnectionDown = middleRandom;
+                    
+                }
+                
+                
             }
-            Console.WriteLine("Next room: {0}", CurrentRoom);
         }
-        
-        public void MoveToPreviousRoom()
-        {
-            Console.WriteLine("Current room: {0}", CurrentRoom);
 
-            // Check if there are any more rooms in the level
-            if (CurrentRoom - 1 >= 0)
+        public void Movement()
+        {
+            if (RoomList[CurrentCorridor][CurrentRoom].Left)
             {
-                CurrentRoom--;
+                Console.WriteLine("Go Left - A");
+                
             }
 
-            Console.WriteLine("Previous room: {0}", CurrentRoom);
+            if (RoomList[CurrentCorridor][CurrentRoom].Right)
+            {
+                Console.WriteLine("Go Right - D");
+            }
+
+            if (RoomList[CurrentCorridor][CurrentRoom].corridorConnectionUp != -1)
+            {
+                Console.WriteLine("Go Up - W");
+            }
+
+            if (RoomList[CurrentCorridor][CurrentRoom].corridorConnectionDown != -1)
+            {
+                Console.WriteLine("Go Down - S");
+            }
+
+            String choice = Console.ReadLine().ToUpper();
+            
+            wrongChoice:
+            switch (choice)
+            {
+                   
+                case "A":
+                    CurrentRoom--;
+                    break;
+                case "D":
+                    CurrentRoom++;
+                    break;
+                case "W":
+                    var temp = RoomList[CurrentCorridor][CurrentRoom].corridorConnectionUp;
+                    CurrentCorridor--;
+                    CurrentRoom = temp;
+                    break;
+                case "S":
+                    var temp2 = RoomList[CurrentCorridor][CurrentRoom].corridorConnectionDown;
+                    CurrentCorridor++;
+                    CurrentRoom = temp2;
+                    break;
+                default:
+                    goto wrongChoice;
+            }
+            
         }
         
         public Room GetCurrentRoom()
         {
-            return RoomList[CurrentRoom];
+            return RoomList[CurrentCorridor][CurrentRoom];
         }
     }
 }

@@ -127,8 +127,15 @@ namespace SE307Project
                 
                 Console.Clear();
 
+                for (int i = 0; i < level.RoomList.Count; i++)
+                {
+                    Console.WriteLine(level.RoomList[i].Count);
+                }
+
                 // Print the room number and the number of monsters in the room
-                Console.WriteLine("You are in room {0}", room.Number);
+                Console.WriteLine("You are in room {0}", level.CurrentRoom);
+                Console.WriteLine("You are in corridor {0}", level.CurrentCorridor);
+                
                 Console.WriteLine("There are {0} monsters in this room", room.Monsters.Count);
 
                 foreach (Monster monster in room.Monsters)
@@ -139,14 +146,9 @@ namespace SE307Project
                 
                 Console.WriteLine("Choose an option:");
                 Console.WriteLine("0. Show Inventory");
+                Console.WriteLine("1. Move");
                 Console.WriteLine("-1. Exit to menu");
-                Console.WriteLine("1. Move to the next room");
-
-                // Only print the previous room option if the current room is not the first room
-                if (level.GetCurrentRoom().Number > 0)
-                {
-                    Console.WriteLine("2. Move to the previous room");
-                }
+               
                 
                 if (level.GetCurrentRoom().Monsters.Count != 0)
                 {
@@ -164,18 +166,14 @@ namespace SE307Project
                 // Move to the next or previous room based on the user's choice
                 else if (choice == 1)
                 {
-                    level.MoveToNextRoom();
+                    level.Movement();
                 }
-                else if (choice == 2 && level.GetCurrentRoom().Number > 0)
-                {
-                    level.MoveToPreviousRoom();
-                }
-                
+
                 else if (choice == 3 && level.GetCurrentRoom().Monsters.Count != 0)
                 {
                     foreach (Monster monster in room.Monsters)
                     {
-                        monster.Description(room.Monsters.IndexOf(monster));
+                        Console.WriteLine(monster.Description(room.Monsters.IndexOf(monster)));
                     }
                     Console.WriteLine("Select a monster for Attack.");
                     int mChoice = int.Parse(Console.ReadLine());
