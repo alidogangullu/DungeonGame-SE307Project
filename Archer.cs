@@ -88,12 +88,19 @@ namespace SE307Project
                 }
                 else if (movement == 3)
                 {
+                    var count = 0;
                     foreach (var item in ItemList)
                     {
+                        count++;
                         if (typeof(Potion) == item.GetType())
                         {
                             Console.WriteLine(ItemList.IndexOf(item) + "( " +item.ToString());
+                            count = 0;
                         }
+                    }// this is here for if there is no potion users don't have to use their turn
+                    if (count == 0)
+                    {
+                        continue;
                     }
                     //Healing
                     Console.WriteLine("Which one do you want to choose ?");
