@@ -9,28 +9,26 @@ namespace SE307Project
     {
         private const double MaxHealth = 85.0;
         private const double MaxEnergy = 150.0;
-        private const int ArcherCritical = 40;
         private String MagicName { get; set; }
 
         public Archer()
         {
             HealthPoint = MaxHealth;
             EnergyPoint = MaxEnergy;
-            CriticalChance = ArcherCritical;
-        }
-        private void DefineMagic()
-        {
-            
         }
 
-        public void UseMagic()
+        protected override void DefineMagic()
         {
+            throw new NotImplementedException();
+        }
 
+        public override void UseMagic()
+        {
+            throw new NotImplementedException();
         }
 
         public override void Attack(Monster monster)
         {
-            base.Attack(monster);
             while (monster.HealthPoint > 0 )
             {
                 Console.WriteLine("What do you want to do?");
@@ -40,12 +38,41 @@ namespace SE307Project
                 Console.WriteLine("4.Adrenaline");// MaginName olcak adreline energy pointi her tur daha fazla artırı
                 Console.WriteLine("Any character to pass");
                 int movement = Convert.ToInt32(Console.ReadLine());
+                
                 if (movement == 1)
                 {
-                    monster.HealthPoint -= Weapon.CalculateDamage();
+                    double formValue = 0;
+                    double damage = Weapon.CalculateDamage(monster.Element, false);
+                    // Checks whatever prediction is non-predicted, normal or critical respectively.
+                    int isPredicted = Prediction(formValue,damage);
+                    if (isPredicted == 0)
+                    {
+                        monster.HealthPoint -= damage/ 2;   
+                    }
+                    else if (isPredicted == 1 )
+                    {
+                        monster.HealthPoint -= damage;
+                    }else if (isPredicted == 2 )
+                    {
+                        monster.HealthPoint -= damage * 2  ;
+                    }
                 }else if (movement == 2 && EnergyPoint > 0)
                 {
-                    monster.HealthPoint -= Weapon.CalculateDamage() * 1.2;
+                    double formValue = 0;
+                    double damage = Weapon.CalculateDamage(monster.Element, true);
+                    int isPredicted = Prediction(formValue,damage);
+                    // Checks whatever prediction is non-predicted, normal or critical respectively.
+                    if (isPredicted == 0)
+                    {
+                        monster.HealthPoint -= damage/ 2;   
+                    }
+                    else if (isPredicted == 1 )
+                    {
+                        monster.HealthPoint -= damage;
+                    }else if (isPredicted == 2 )
+                    {
+                        monster.HealthPoint -= damage * 2  ;
+                    }
                     EnergyPoint -= 20;
                 }else if (movement == 3)
                 {
@@ -96,11 +123,6 @@ namespace SE307Project
         public override double CalculateEnergyPoint()
         {
             return EnergyPoint;
-        }
-
-        public override int CalculateCriticalChance()
-        {
-            return CriticalChance;
         }
     }
 }

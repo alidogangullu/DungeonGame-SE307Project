@@ -25,22 +25,30 @@ namespace SE307Project
 
         public abstract double CalculateEnergyPoint();
 
-        public abstract int CalculateCriticalChance();
-
-        public virtual void DefineMagic()
-        {
-
-        }
-
-
-        public virtual void UseMagic()
-        {
-            
-        }
-
+        protected abstract void DefineMagic();
+        public abstract void UseMagic();
         public abstract void Attack(Monster monster);
 
+        public int Prediction(double predict, double exactValue)
+        {
+            int isPredicted;
+            double diff = Math.Abs(predict - exactValue);
+            //Critical Chance
+            if (diff <= 1)
+            {
+                isPredicted = 2;
+            }//Normal Damage
+            else if (1 < diff && diff <= 3)
+            {
+                isPredicted = 1;
+            }
+            else
+            {
+                isPredicted = 0;
+            }
 
+            return isPredicted;
+        }
         public virtual void ShowItemList()
         {
             Console.WriteLine("---Inventory---");

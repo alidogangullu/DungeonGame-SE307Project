@@ -81,6 +81,37 @@ namespace SE307Project
         {
             return Damage;
         }
+
+        public double CalculateDamage(ElementType monsterElement,bool isHeavy)
+        {
+            int percentage = 0;
+            if (monsterElement == ElementType.Dark && Element == ElementType.Holy )
+            {
+                percentage = 30;
+            }else if (monsterElement == ElementType.Holy && Element == ElementType.Dark)
+            {
+                percentage = 30;
+            }
+            else if (monsterElement == ElementType.Water && Element == ElementType.Lightning )
+            {
+                percentage = 40;
+            }else if (monsterElement == ElementType.Lightning && Element == ElementType.Nature)
+            {
+                percentage = 40;
+            }else if (monsterElement == ElementType.Nature && Element == ElementType.Fire)
+            {
+                percentage = 40;
+            }else if (monsterElement == ElementType.Fire && Element == ElementType.Water)
+            {
+                percentage = 40;
+            }
+            else
+            {
+                return CalculateDamage();
+            }
+
+            return isHeavy ? (Damage + Damage * (percentage / 100.0))*1.2 : (Damage + Damage * (percentage / 100.0)) ;
+        }
     }
     [Serializable]
     public class Cloth : Item
