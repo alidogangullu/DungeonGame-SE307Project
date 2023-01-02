@@ -11,38 +11,45 @@ namespace SE307Project
         private const double MaxEnergy = 150.0;
         private String MagicName { get; set; }
 
-        public Archer()
+        public Archer() : base()
         {
             HealthPoint = MaxHealth;
             EnergyPoint = MaxEnergy;
+            Weapon = new Weapon("Old Short Bow", 0, ElementType.Normal, 5);
+            Cloth = new Cloth("Dusty Outfit", 0, ElementType.Normal, 5);
+            MagicName = "Adrenaline";
         }
-
-        protected override void DefineMagic()
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public override void UseMagic()
         {
-            throw new NotImplementedException();
+            EnergyPoint -= 50;
+            Cooldown = 7;
         }
 
-        public override void Attack(Monster monster)
+        public override bool Attack(Monster monster)
         {
-            while (monster.HealthPoint > 0 )
+            bool isWon = false;
+            bool isMagicUsed = false;
+            while (monster.HealthPoint > 0  && HealthPoint > 0)
             {
                 Console.WriteLine("What do you want to do?");
                 Console.WriteLine("1.Shoot an arrow");
-                Console.WriteLine("2.Shoot two arrows");
+                if (EnergyPoint >= 20)
+                {
+                    Console.WriteLine("2.Shoot two arrows");
+                }
                 Console.WriteLine("3.Drink Potion");
-                Console.WriteLine("4.Adrenaline");// MaginName olcak adreline energy pointi her tur daha fazla artırı
-                Console.WriteLine("Any character to pass");
+                if (EnergyPoint >= 50 && Cooldown == 0)
+                {
+                    Console.WriteLine("4."+MagicName);
+                }
+             
                 int movement = Convert.ToInt32(Console.ReadLine());
                 
                 if (movement == 1)
                 {
                     double formValue = 0;
-                    double damage = Weapon.CalculateDamage(monster.Element, false);
+                    double damage = Weapon.CalculateDamage(monster.Element, false,isMagicUsed);
                     // Checks whatever prediction is non-predicted, normal or critical respectively.
                     int isPredicted = Prediction(formValue,damage);
                     if (isPredicted == 0)
@@ -56,10 +63,10 @@ namespace SE307Project
                     {
                         monster.HealthPoint -= damage * 2  ;
                     }
-                }else if (movement == 2 && EnergyPoint > 0)
+                }else if (movement == 2 && EnergyPoint >= 20)
                 {
                     double formValue = 0;
-                    double damage = Weapon.CalculateDamage(monster.Element, true);
+                    double damage = Weapon.CalculateDamage(monster.Element, true,isMagicUsed);
                     int isPredicted = Prediction(formValue,damage);
                     // Checks whatever prediction is non-predicted, normal or critical respectively.
                     if (isPredicted == 0)
@@ -74,7 +81,8 @@ namespace SE307Project
                         monster.HealthPoint -= damage * 2  ;
                     }
                     EnergyPoint -= 20;
-                }else if (movement == 3)
+                }
+                else if (movement == 3)
                 {
                     foreach (var item in ItemList)
                     {
@@ -97,9 +105,10 @@ namespace SE307Project
                         Console.WriteLine(e);
                     }
                     
-                }else if (movement == 4)
+                }else if (movement == 4 && EnergyPoint >= 40 && Cooldown == 0)
                 {
                     UseMagic();
+                    isMagicUsed = true;
                 }
                 else
                 {
@@ -107,7 +116,23 @@ namespace SE307Project
                 }
                 monster.Attack(this);
                 EnergyPoint += 10;
+                if (Cooldown > 0)
+                {
+                    Cooldown -= 1;
+                }
+                if (Cooldown == 4)
+                {
+                    isMagicUsed = false;
+                }
             }
+            if (HealthPoint <= 0)
+            {
+                Console.WriteLine("Game Over");
+            }else if (monster.HealthPoint <= 0)
+            {
+                isWon = true;
+            }
+            return isWon;
         }
 
         public override double CalculateHealthPoint()

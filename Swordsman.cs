@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 
 namespace SE307Project
 {
@@ -13,49 +9,22 @@ namespace SE307Project
         private const double MaxEnergy = 100.0;
         private String MagicName { get; set; }
 
-        public SwordsMan()
+        public SwordsMan(): base()
         {
             HealthPoint = MaxHealth;
             EnergyPoint = MaxEnergy;
+            Weapon = new Weapon("Stick", 0, ElementType.Normal, 5);
+            Cloth = new Cloth("Dusty Outfit", 0, ElementType.Normal, 5);
         }
-        protected override void DefineMagic()
-        {
-            
-        }
-
         public override void UseMagic()
         {
             throw new NotImplementedException();
         }
 
-        public override void Attack(Monster monster)
+        public override bool Attack(Monster monster)
         {
-            Form form = new Form();
-
-            // Set the form's properties
-            form.Text = monster.MType.ToString();
-            
-            // Add a button to the form
-            Button button = new Button();
-            button.Text = "Attack "+monster.MType;
-            button.Location = new Point(100, 50);
-            button.AutoSize = true;
-            
-            form.Controls.Add(button);
-            
-            // Create a new label
-            Label label = new Label();
-
-            // Set the label's properties
-            label.Text = monster.Description(1);
-            label.Location = new Point(100, 0);
-            label.AutoSize = true;
-
-            // Add the label to the form
-            form.Controls.Add(label);
-
-            // Start the GUI's message loop
-            Application.Run(form);
+            bool isWon = false;
+            bool isMagicUsed = false;
             while (monster.HealthPoint > 0 && HealthPoint >0 )
             {
                 Console.WriteLine("What do you want to do?");
@@ -70,7 +39,7 @@ namespace SE307Project
                 if (movement == 1)
                 {
                     double formValue = 0;
-                    double damage = Weapon.CalculateDamage(monster.Element, false);
+                    double damage = Weapon.CalculateDamage(monster.Element, false,isMagicUsed);
                     // Checks whatever prediction is non-predicted, normal or critical respectively.
                     int isPredicted = Prediction(formValue,damage);
                     if (isPredicted == 0)
@@ -89,7 +58,7 @@ namespace SE307Project
                 else if (movement == 2 && EnergyPoint > 0)
                 {
                     double formValue = 0;
-                    double damage = Weapon.CalculateDamage(monster.Element, true);
+                    double damage = Weapon.CalculateDamage(monster.Element, true,isMagicUsed);
                     int isPredicted = Prediction(formValue,damage);
                     // Checks whatever prediction is non-predicted, normal or critical respectively.
                     if (isPredicted == 0)
@@ -132,6 +101,7 @@ namespace SE307Project
                 }else if (movement == 4)
                 {
                     UseMagic();
+                    isMagicUsed = true;
                 }
                 else
                 {
@@ -143,18 +113,24 @@ namespace SE307Project
                     monster.Attack(this);
                 }
                 EnergyPoint += 10;
+                if (Cooldown > 0)
+                {
+                    Cooldown -= 1;
+                }
+                if (Cooldown == 4) 
+                {
+                    isMagicUsed = false;
+                }
             }
 
             if (HealthPoint <= 0)
             {
-                // levela döner
                 Console.WriteLine("Game Over");
             }else if (monster.HealthPoint <= 0)
             {
-                //Mimarisi güzel olanı yap return olan
-                //monster.DropItems();
+                isWon = true;
             }
-            
+            return isWon;
         }
 
         public override double CalculateHealthPoint()
@@ -172,5 +148,31 @@ namespace SE307Project
             return EnergyPoint;
         }
         
+        /*Form form = new Form();
+
+            // Set the form's properties
+            form.Text = monster.MType.ToString();
+            
+            // Add a button to the form
+            Button button = new Button();
+            button.Text = "Attack "+monster.MType;
+            button.Location = new Point(100, 50);
+            button.AutoSize = true;
+            
+            form.Controls.Add(button);
+            
+            // Create a new label
+            Label label = new Label();
+
+            // Set the label's properties
+            label.Text = monster.Description(1);
+            label.Location = new Point(100, 0);
+            label.AutoSize = true;
+
+            // Add the label to the form
+            form.Controls.Add(label);
+
+            // Start the GUI's message loop
+            Application.Run(form);*/
     }
 }

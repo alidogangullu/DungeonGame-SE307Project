@@ -177,7 +177,8 @@ namespace SE307Project
                     }
                     Console.WriteLine("Select a monster for Attack.");
                     int mChoice = int.Parse(Console.ReadLine());
-                    currentCharacter.Attack(room.Monsters[mChoice]);
+                    bool isWon = currentCharacter.Attack(room.Monsters[mChoice]);
+                    // drop items burda olması lazım
                 }
                 
                 Console.WriteLine(Level.LevelNumber);

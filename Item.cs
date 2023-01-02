@@ -25,7 +25,7 @@ namespace SE307Project
         public String Name { get; set; }
         protected int Value { get; set; }
         public static FactionType Faction { get; set; }
-        protected ElementType Element { get; set; }
+        public ElementType Element { get; set; }
         // for sorting other items according to date
         private DateTime Date { get; set; }
 
@@ -82,9 +82,9 @@ namespace SE307Project
             return Damage;
         }
 
-        public double CalculateDamage(ElementType monsterElement,bool isHeavy)
+        public double CalculateDamage(ElementType monsterElement,bool isHeavy, bool isSkill)
         {
-            int percentage = 0;
+            int percentage;
             if (monsterElement == ElementType.Dark && Element == ElementType.Holy )
             {
                 percentage = 30;
@@ -109,8 +109,22 @@ namespace SE307Project
             {
                 return CalculateDamage();
             }
-
-            return isHeavy ? (Damage + Damage * (percentage / 100.0))*1.2 : (Damage + Damage * (percentage / 100.0)) ;
+            
+            if (Faction == FactionType.Mage && isSkill)
+            {
+                return isHeavy ? (Damage + Damage * ((percentage+20) / 100.0))*1.2 :
+                    (Damage + Damage * ((percentage+20) / 100.0)) ;
+            }
+            else if (Faction == FactionType.Swordsman && isSkill)
+            {
+                return 1 ;
+            }
+            else if (Faction == FactionType.Archer && isSkill)
+            {
+                
+            }
+            return isHeavy ? (Damage + Damage * ((percentage) / 100.0))*1.2 :
+                (Damage + Damage * ((percentage) / 100.0)) ;
         }
     }
     [Serializable]

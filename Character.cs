@@ -22,12 +22,9 @@ namespace SE307Project
 
         public abstract double CalculateHealthPoint();
         public abstract void SetHealth(double health);
-
         public abstract double CalculateEnergyPoint();
-
-        protected abstract void DefineMagic();
         public abstract void UseMagic();
-        public abstract void Attack(Monster monster);
+        public abstract bool Attack(Monster monster);
 
         public int Prediction(double predict, double exactValue)
         {
