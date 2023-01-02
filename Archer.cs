@@ -17,13 +17,13 @@ namespace SE307Project
             EnergyPoint = MaxEnergy;
             Weapon = new Weapon("Old Short Bow", 0, ElementType.Normal, 5);
             Cloth = new Cloth("Dusty Outfit", 0, ElementType.Normal, 5);
-            MagicName = "Adrenaline";
+            MagicName = "Turn into shadow";
         }
         
         public override void UseMagic()
         {
             EnergyPoint -= 50;
-            Cooldown = 7;
+            Cooldown = 6;
         }
 
         public override bool Attack(Monster monster)
@@ -63,7 +63,8 @@ namespace SE307Project
                     {
                         monster.HealthPoint -= damage * 2  ;
                     }
-                }else if (movement == 2 && EnergyPoint >= 20)
+                }
+                else if (movement == 2 && EnergyPoint >= 20)
                 {
                     double formValue = 0;
                     double damage = Weapon.CalculateDamage(monster.Element, true,isMagicUsed);
@@ -105,7 +106,8 @@ namespace SE307Project
                         Console.WriteLine(e);
                     }
                     
-                }else if (movement == 4 && EnergyPoint >= 40 && Cooldown == 0)
+                }
+                else if (movement == 4 && EnergyPoint >= 40 && Cooldown == 0)
                 {
                     UseMagic();
                     isMagicUsed = true;
@@ -114,7 +116,7 @@ namespace SE307Project
                 {
                     Console.WriteLine("Passed!");
                 }
-                monster.Attack(this);
+                monster.Attack(this,isMagicUsed);
                 EnergyPoint += 10;
                 if (Cooldown > 0)
                 {

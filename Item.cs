@@ -117,7 +117,7 @@ namespace SE307Project
             }
             else if (Faction == FactionType.Swordsman && isSkill)
             {
-                return 1 ;
+                return  1 ;
             }
             else if (Faction == FactionType.Archer && isSkill)
             {
@@ -130,7 +130,7 @@ namespace SE307Project
     [Serializable]
     public class Cloth : Item
     {
-        private double Defence { get; set; }
+        public double Defence { get; set; }
 
         public Cloth(String name, int val, ElementType elementType, double defence) :
             base(name, val, elementType)

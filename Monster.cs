@@ -195,20 +195,24 @@ namespace SE307Project
             return description;
         }
         
-        public void Attack(Character enemy)
+        public void Attack(Character enemy, bool isSkill)
         {
+            if (isSkill && enemy.GetType() == typeof(Archer))
+            {
+                return;
+            }
             Random random = new Random();
             var attackType = random.Next(1, 3);
             // Normal Attack
             if (attackType == 1)
             {
                 Console.WriteLine("Normal Attack!");
-                enemy.SetHealth(enemy.CalculateHealthPoint()-BaseDamage);
+                enemy.SetHealth(enemy.CalculateHealthPoint()+enemy.Cloth.Defence - BaseDamage );
             }//Heavy Attack
             else if (attackType == 2)
             {
                 Console.WriteLine("Heavy Attack!");
-                enemy.SetHealth(enemy.CalculateHealthPoint()-BaseDamage*1.5);
+                enemy.SetHealth(enemy.CalculateHealthPoint()+enemy.Cloth.Defence-BaseDamage*1.2);
             }
         }
 

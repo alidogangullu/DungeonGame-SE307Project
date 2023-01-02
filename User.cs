@@ -230,7 +230,7 @@ namespace SE307Project
                 Console.WriteLine("---------------------------------------------");
                 Console.WriteLine("Your Health: " + currentCharacter.HealthPoint);
                 Console.WriteLine("Your Energy: " + currentCharacter.EnergyPoint);
-                //TODO Console.WriteLine("Your Attack Damage: " + currentCharacter.Weapon.Damage);
+                Console.WriteLine("Your Attack Damage: " + currentCharacter.Weapon.Damage);
                 Console.WriteLine("---------------------------------------------");
 
                
@@ -393,7 +393,7 @@ namespace SE307Project
         {
             //Open the file which name is equal to this userID.
             if (File.Exists(Directory.GetCurrentDirectory()+@"\users\"+ID + ".bin"))
-            {
+            {   
                 // Deserialize the user from the file which created in CreateUser
                 using (FileStream fs = new FileStream(Directory.GetCurrentDirectory()+@"\users\"+ID + ".bin", FileMode.Open))
                 {

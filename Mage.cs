@@ -116,7 +116,7 @@ namespace SE307Project
                 {
                     Console.WriteLine("Passed!");
                 }
-                monster.Attack(this);
+                monster.Attack(this,isMagicUsed);
                 EnergyPoint += 10;
                 if (Cooldown > 0)
                 {

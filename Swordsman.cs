@@ -15,10 +15,12 @@ namespace SE307Project
             EnergyPoint = MaxEnergy;
             Weapon = new Weapon("Stick", 0, ElementType.Normal, 5);
             Cloth = new Cloth("Dusty Outfit", 0, ElementType.Normal, 5);
+            MagicName = "Divine's Blessing";
         }
         public override void UseMagic()
         {
-            throw new NotImplementedException();
+            EnergyPoint -= 50;
+            Cooldown = 7;
         }
 
         public override bool Attack(Monster monster)
@@ -29,9 +31,15 @@ namespace SE307Project
             {
                 Console.WriteLine("What do you want to do?");
                 Console.WriteLine("1.Slash");
-                Console.WriteLine("2.Mighty Slash");
+                if (EnergyPoint >= 40)
+                {
+                    Console.WriteLine("2.Mighty Slash");
+                }
                 Console.WriteLine("3.Drink Potion");
-                Console.WriteLine("4.Encourage"); // magic name
+                if (EnergyPoint >= 50 && Cooldown == 0 )
+                {
+                    Console.WriteLine(MagicName); 
+                }
                 Console.WriteLine("Any character to pass");
                 int movement = Convert.ToInt32(Console.ReadLine());
                 
@@ -110,16 +118,20 @@ namespace SE307Project
 
                 if (monster.HealthPoint > 0)
                 {
-                    monster.Attack(this);
+                    monster.Attack(this,isMagicUsed);
                 }
                 EnergyPoint += 10;
                 if (Cooldown > 0)
                 {
                     Cooldown -= 1;
                 }
-                if (Cooldown == 4) 
+                if (Cooldown == 3) 
                 {
                     isMagicUsed = false;
+                }
+                if (Cooldown > 3 )
+                {
+                    SetHealth(HealthPoint+10);
                 }
             }
 
