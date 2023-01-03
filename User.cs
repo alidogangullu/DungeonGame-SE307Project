@@ -210,11 +210,6 @@ namespace SE307Project
                 
                 Console.Clear();
 
-                for (int i = 0; i < level.RoomList.Count; i++)
-                {
-                    Console.WriteLine(level.RoomList[i].Count);
-                }
-
                 // Print the room number and the number of monsters in the room
                 Console.WriteLine("--------------Level "+ Level.LevelNumber +"-------------------");
                 Console.WriteLine("You are in Room {0}", level.CurrentRoom);
