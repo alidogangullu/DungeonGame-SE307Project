@@ -189,6 +189,7 @@ namespace SE307Project
                 }
             }
         }
+        
 
         public void StartGame()
         {
@@ -196,9 +197,9 @@ namespace SE307Project
             ChooseCharacter();
             // First we define level so that loading level number can work
             Level level = new Level();
-            LoadGame(); //Load lastCheckpointLvl.
-            
             level.GenerateLevel();
+            
+            LoadGame(); //Load lastCheckpointLvl.
 
             int choice = 0;
             
