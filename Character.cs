@@ -15,9 +15,11 @@ namespace SE307Project
         protected int Cooldown { get; set; }
         public Weapon Weapon { get; set; }
         public Cloth Cloth { get; set; }
+        public int lastCheckpointLvl  { get; set ; }
         public Character()
         {
             ItemList = new List<Item>(10);
+            lastCheckpointLvl = 0;
         }
 
         public abstract double CalculateHealthPoint();

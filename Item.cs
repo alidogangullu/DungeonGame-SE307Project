@@ -27,7 +27,7 @@ namespace SE307Project
         public static FactionType Faction { get; set; }
         public ElementType Element { get; set; }
         // for sorting other items according to date
-        private DateTime Date { get; set; }
+        public DateTime Date { get; set; }
 
         public Item() {Date = DateTime.Now; } 
         public Item(String name, int value)

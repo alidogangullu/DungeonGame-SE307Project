@@ -6,6 +6,7 @@ namespace SE307Project
     public class Level
     {
         public static int LevelNumber;
+        public DateTime GenerationDateTime { get; private set; }
         public List<List<Room>> RoomList { get; set; }
         public int CurrentRoom { get; set; }
         public int CurrentCorridor { get; set; }
@@ -20,6 +21,7 @@ namespace SE307Project
         {
             LevelNumber++;
             RoomList.Clear();
+            GenerationDateTime = DateTime.Now;
             
             int numFloors = new Random().Next(1, 3);
             numFloors *= LevelNumber;
@@ -64,12 +66,11 @@ namespace SE307Project
                     RoomList[i - 1][roomNumberToGoDown].corridorConnectionDown = middleRandom;
                     
                 }
-                
-                
             }
+            Console.WriteLine("Level Generated!");
         }
 
-        public void Movement()
+        public bool Movement()
         {
             if (RoomList[CurrentCorridor][CurrentRoom].Left)
             {
@@ -107,10 +108,11 @@ namespace SE307Project
                 if (input.Equals("y"))
                 {
                     GenerateLevel();
+                    return true;
                 }
                 else if (input.Equals("n"))
                 {
-                    
+                    return true;
                 }
                 
             }
@@ -169,7 +171,8 @@ namespace SE307Project
                         Console.WriteLine("Wrong input, try again!");
                         goto wrongChoice;
                 }
-                
+
+                return false;
         }
         
         public Room GetCurrentRoom()

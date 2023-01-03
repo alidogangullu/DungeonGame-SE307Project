@@ -9,19 +9,16 @@ namespace SE307Project
     [Serializable] 
     public class User
     {
-        private long ID { get; set; }
+        public long ID { get; set; }
         private List<Character> CharacterList { get; set; }
         public Character currentCharacter { get; set; }
         private List<int> ScoreList { get; set; }
-
-        public int lastCheckpointLvl  { get; set ; }
-
+        
         public User(long UserID)
         {
             ID = UserID;
             CharacterList = new List<Character>();
             ScoreList = new List<int>();
-            lastCheckpointLvl = 3;
         }
         
         private void ChooseCharacter()
@@ -150,17 +147,27 @@ namespace SE307Project
         
         public void LoadGame()
         {
-            if (lastCheckpointLvl > Level.LevelNumber)
+            if (currentCharacter.lastCheckpointLvl > Level.LevelNumber)
             {
-                Level.LevelNumber = lastCheckpointLvl;
+                Level.LevelNumber = currentCharacter.lastCheckpointLvl;
             }
         }
 
         private void SaveGame()
         {
             //save last finished level's number
-            lastCheckpointLvl = Level.LevelNumber;
+            currentCharacter.lastCheckpointLvl = Level.LevelNumber;
+
+            // Open the file
+            using FileStream fs = new FileStream(Directory.GetCurrentDirectory()+@"\users\"+ID + ".bin", FileMode.Create);
             
+            // Save this object
+            BinaryFormatter formatter = new BinaryFormatter();
+            fs.Position = 0;
+            formatter.Serialize(fs, this);
+        }
+        public void SaveUser()
+        {
             // Open the file
             using FileStream fs = new FileStream(Directory.GetCurrentDirectory()+@"\users\"+ID + ".bin", FileMode.Create);
             
@@ -170,14 +177,28 @@ namespace SE307Project
             formatter.Serialize(fs, this);
         }
 
+        // When user wants exit without finishing the level
+        private void ThrowItems(DateTime genDate)
+        {
+            List<Item> items = new List<Item>();
+            items = currentCharacter.ItemList;
+            foreach (var item in currentCharacter.ItemList)
+            {
+                if (item.Date.CompareTo(genDate) > 0)
+                {
+                    items.Remove(item);
+                }
+            }
+        }
+
         public void StartGame()
         {
+            bool isExitPossible= false;
             ChooseCharacter();
-            
-            //SaveGame(); //Save new characters.
+            // First we define level so that loading level number can work
+            Level level = new Level();
             LoadGame(); //Load lastCheckpointLvl.
             
-            Level level = new Level();
             level.GenerateLevel();
 
             int choice = 0;
@@ -250,7 +271,39 @@ namespace SE307Project
                         currentCharacter.ShowItemList();
                         break;
                     case 1:
-                        level.Movement();
+                        isExitPossible = level.Movement();
+                        if (isExitPossible)
+                        {
+                            Console.WriteLine("You complete level " + Level.LevelNumber +
+                                              "press '0' for save and exit, '-1' for exit without saving.");
+                            bool inputValid = false;
+                            while (!inputValid)
+                            {
+                                try
+                                {
+                                    choice = int.Parse(Console.ReadLine());
+
+                                    if (choice == 0)
+                                    {
+                                        inputValid = true;
+                                        SaveGame();
+                                        Score();
+                                        //saves last completed level number, it can be used for difficulty (monsters and generateLevel calculations).
+                            
+                                    }
+
+                                    else if (choice == -1)
+                                    {
+                                        inputValid = true;
+                                        Score();
+                                    }
+                                }
+                                catch (FormatException)
+                                {
+                                    Console.WriteLine("Invalid input format. Please enter a valid integer.");
+                                }
+                            }
+                        }
                         break;
                     case 2:
                     {
@@ -302,6 +355,7 @@ namespace SE307Project
                             else
                             {
                                 Console.WriteLine("You are dead, nice try!");
+                                SaveGame();
                             }
                         }
                         catch (FormatException)
@@ -315,41 +369,19 @@ namespace SE307Project
 
                         break;
                     }
+                    case -1 :
+                        SaveGame();
+                        ThrowItems(level.GenerationDateTime);
+                        break;
                     default:
                         Console.WriteLine("Wrong Input. Try Again.");
                         goto wrongChoice;
                 }
-
             }
-            
-            bool inputValid = false;
+        }
 
-            while (!inputValid)
-            {
-                Console.WriteLine("You complete level " + Level.LevelNumber +
-                                  "press '0' for save and exit, '-1' for exit without saving.");
-                try
-                {
-                    choice = int.Parse(Console.ReadLine());
-
-                    if (choice == 0)
-                    {
-                        inputValid = true;
-                        SaveGame();
-                        //saves last completed level number, it can be used for difficulty (monsters and generateLevel calculations).
-                    }
-
-                    else if (choice == -1)
-                    {
-                        inputValid = true;
-                    }
-                }
-                catch (FormatException)
-                {
-                    Console.WriteLine("Invalid input format. Please enter a valid integer.");
-                }
-            }
-
+        public void Score()
+        {
             int score = 0;
             foreach (Item item in currentCharacter.ItemList)
             {
@@ -358,59 +390,5 @@ namespace SE307Project
             
             Console.WriteLine("Your total score is " + score);
         }
-
-        public void CreateUser()
-        {
-            if (!Directory.Exists(Directory.GetCurrentDirectory()+@"\users\"))
-            {
-                Directory.CreateDirectory(Directory.GetCurrentDirectory()+@"\users\");
-            }
-            String[] fileNames = Directory.GetFiles(Directory.GetCurrentDirectory()+@"\users\");
-            
-            long biggestID = 0;
-            foreach (String fileName in fileNames)
-            {
-                // get userID from fileName
-                String[] parts = fileName.Split(@"\");
-                String filename = parts.Last();  // "1.bin"
-                String[] filenameParts = filename.Split('.');
-                String numberString = filenameParts.First();  // "1"
-                
-                long readedID = long.Parse(numberString);
-                
-                if (readedID > biggestID)
-                {
-                    biggestID = readedID;
-                }
-            }
-            
-            //create a new user with unique id
-            long newUserID = biggestID + 1;
-            new User(newUserID).SaveGame();
-            Console.WriteLine("Your ID is " + newUserID);
-        }
-        
-        public User FindUser(long ID)
-        {
-            //Open the file which name is equal to this userID.
-            if (File.Exists(Directory.GetCurrentDirectory()+@"\users\"+ID + ".bin"))
-            {   
-                // Deserialize the user from the file which created in CreateUser
-                using (FileStream fs = new FileStream(Directory.GetCurrentDirectory()+@"\users\"+ID + ".bin", FileMode.Open))
-                {
-                    BinaryFormatter formatter = new BinaryFormatter();
-                    User user= (User)formatter.Deserialize(fs);
-
-                    // Use the deserialized object
-                    Console.WriteLine("Welcome: " + user.ID);
-                    return user;
-                }
-            }
-            else
-            {
-                return null;
-            }
-        }
-        
     }
 }
