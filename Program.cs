@@ -62,6 +62,7 @@ namespace SE307Project
                 Console.WriteLine("Choose an action:");
                 Console.WriteLine("-1.Exit");
                 Console.WriteLine("1.Select a character");
+                Console.WriteLine("2.Tutorial ");
 
                 input = Convert.ToInt32(Console.ReadLine());
 
@@ -69,6 +70,34 @@ namespace SE307Project
                 {
                     case 1:
                         currentUser.StartGame();
+                        break;
+                    case 2:
+                        Console.WriteLine("Factions\n" +
+                                          "Each faction have one normal attack one heavy attack; heavy attack consumes 40 energy points.\n" +
+                                          "Every faction has it's own unique type of magic abilities. It consumes 50 energy points\n" +
+
+                                          "Archer: \n" +
+                                          "Can dodge every incoming attack from monster for 2 turns. Cooldown:\n" +
+
+                                          "Mage:\n" +
+                                          "Can increase 20 percent of the elemantal advantage for 3 turns. Cooldow\n:" +
+
+                                          "Swordsman:\n" +
+                                          "Can heal 10 health points for 2 turns\n" +
+                                          " ------------------------------‐-----\n" +
+                                          "Elements \n" +
+                                          "Dark is 30% more effective to Holy\n" +
+                                          "Holy is 30% more  effective to Dark\n" +
+
+                                          "Fire is 40% more effective to Nature\n" +
+                                          "Nature is 40% more effective to Lighting\n" +
+                                          "Lightning is 40% more effective to Water\n" +
+                                          "Water is 40% more effective to Water \n" +
+                                          "Elements is only effective for weapons\n" +
+                                          "In attack phase you have to calculate the damage which is going to be happen.\n" +
+                                          " If you want to make an critical attack you should predict around exact value +-0.5 in 5 seconds.\n" +
+                                          " If you want your attack to reach its exact value you should predict around +-1\n"+
+                        "Each time you are collecting items which have certain value. At the level's end you can see on the screen your score");
                         break;
                     default:
                         input = -1;
