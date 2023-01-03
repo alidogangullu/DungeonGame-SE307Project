@@ -108,6 +108,11 @@ namespace SE307Project
                 {
                     GenerateLevel();
                 }
+                else if (input.Equals("n"))
+                {
+                    
+                }
+                
             }
             
             wrongChoice:

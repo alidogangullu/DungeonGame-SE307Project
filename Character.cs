@@ -109,6 +109,10 @@ namespace SE307Project
             Console.WriteLine("Select an item or '-1' to quit");
             int choice = Convert.ToInt32(Console.ReadLine());
 
+            if (choice == -1)
+            {
+                return;
+            }
             if (ItemList[choice].GetType() == typeof(Weapon))
             {
                 ItemList.Add(this.Weapon);
@@ -121,11 +125,18 @@ namespace SE307Project
                 ItemList.Add(this.Cloth);
                 this.Cloth = ItemList[choice] as Cloth;
             }
+            
+        }
 
-            else if (choice == -1)
-            {
-                
-            }
+        public void Description()
+        {
+            Console.WriteLine("---------------------------------------------");
+            Console.WriteLine("Your Health: " +HealthPoint);
+            Console.WriteLine("Your Energy: " + EnergyPoint);
+            Console.WriteLine("Your Attack Damage: " + Weapon.Damage +" Element: " + Weapon.Element);
+            Console.WriteLine("Your Defense: " + Cloth.Defence+" Element: " + Cloth.Element);
+            Console.WriteLine("Your Magic Cooldown: "+ Cooldown);
+            Console.WriteLine("---------------------------------------------");
         }
         
     }

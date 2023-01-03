@@ -189,29 +189,31 @@ namespace SE307Project
         
         public String Description(int i)
         {
-            String description = i+ "- " + MType + "\n" 
+            String description = i + "- " + MType + "\n"
                                  + "Monster Damage: " + BaseDamage + "\n"
-                                 + "Monster Health: "+HealthPoint;
+                                 + "Monster Health: " + HealthPoint + "\n"
+                                 + "Monster Element: " + Element;
             return description;
         }
         
         public void Attack(Character enemy, bool isSkill)
         {
+
             if (isSkill && enemy.GetType() == typeof(Archer))
             {
                 return;
             }
             Random random = new Random();
-            var attackType = random.Next(1, 3);
+            var attackType = random.Next(1, 7);
             // Normal Attack
-            if (attackType == 1)
+            if (attackType == 1 || attackType == 2 || attackType == 3 || attackType == 4)
             {
-                Console.WriteLine("Normal Attack!");
+                Console.WriteLine("Monster's turn: Normal Attack!");
                 enemy.SetHealth(enemy.CalculateHealthPoint()+enemy.Cloth.Defence - BaseDamage );
             }//Heavy Attack
-            else if (attackType == 2)
+            else if (attackType == 5 || attackType == 6 )
             {
-                Console.WriteLine("Heavy Attack!");
+                Console.WriteLine("Monster's turn: Heavy Attack!");
                 enemy.SetHealth(enemy.CalculateHealthPoint()+enemy.Cloth.Defence-BaseDamage*1.2);
             }
         }

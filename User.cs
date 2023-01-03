@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.PortableExecutable;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace SE307Project
@@ -15,13 +14,14 @@ namespace SE307Project
         public Character currentCharacter { get; set; }
         private List<int> ScoreList { get; set; }
 
-        public int lastCheckpointLvl { get; set; }
+        public int lastCheckpointLvl  { get; set ; }
 
         public User(long UserID)
         {
             ID = UserID;
             CharacterList = new List<Character>();
             ScoreList = new List<int>();
+            lastCheckpointLvl = 3;
         }
         
         private void ChooseCharacter()
@@ -174,7 +174,7 @@ namespace SE307Project
         {
             ChooseCharacter();
             
-            SaveGame(); //Save new characters.
+            //SaveGame(); //Save new characters.
             LoadGame(); //Load lastCheckpointLvl.
             
             Level level = new Level();
@@ -227,13 +227,8 @@ namespace SE307Project
                     Console.WriteLine("3. Attack");
                 }
                 
-                Console.WriteLine("---------------------------------------------");
-                Console.WriteLine("Your Health: " + currentCharacter.HealthPoint);
-                Console.WriteLine("Your Energy: " + currentCharacter.EnergyPoint);
-                Console.WriteLine("Your Attack Damage: " + currentCharacter.Weapon.Damage);
-                Console.WriteLine("---------------------------------------------");
-
-               
+                currentCharacter.Description();
+                
                 wrongChoice:
                 Boolean inptValid = false;
                 while (!inptValid)
@@ -272,6 +267,7 @@ namespace SE307Project
                             else
                             {
                                 currentCharacter.ItemList.Add(room.DroppedItems[itemNo]);
+                                room.DroppedItems.RemoveAt(itemNo);
                             }
                         }
                         catch (FormatException)
@@ -301,6 +297,11 @@ namespace SE307Project
                             if (isWon)
                             {
                                 room.Monsters[mChoice].DropItems(room);
+                                level.GetCurrentRoom().Monsters.RemoveAt(mChoice);
+                            }
+                            else
+                            {
+                                Console.WriteLine("You are dead, nice try!");
                             }
                         }
                         catch (FormatException)

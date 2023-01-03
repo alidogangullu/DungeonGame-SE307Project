@@ -32,6 +32,19 @@ namespace SE307Project
             bool isMagicUsed = false;
             while (monster.HealthPoint > 0  && HealthPoint > 0)
             {
+                Description();
+                Console.WriteLine(monster.Description(1));
+                Console.WriteLine("\n");
+                
+                if (isMagicUsed)
+                {
+                    Console.WriteLine(MagicName + ": Active");
+                }
+                else
+                {
+                    Console.WriteLine(MagicName + ": Not Active");
+                }
+                
                 Console.WriteLine("What do you want to do?");
                 Console.WriteLine("1.Shoot an arrow");
                 if (EnergyPoint >= 20)
@@ -51,6 +64,7 @@ namespace SE307Project
                     string formValue ;
                     int time = 0;
                     double damage = Weapon.CalculateDamage(monster.Element, false,isMagicUsed);
+                    Console.WriteLine("Enter any prediction value you have 5 seconds to gain critic chance: ");
                     (time,formValue) = Timer();
                     int isPredicted = Prediction(time,Convert.ToDouble(formValue),damage);
                     if (isPredicted == 0)
@@ -70,6 +84,7 @@ namespace SE307Project
                     string formValue ;
                     int time = 0;
                     double damage = Weapon.CalculateDamage(monster.Element, true,isMagicUsed);
+                    Console.WriteLine("Enter any prediction value you have 5 seconds to gain critic chance: ");
                     (time,formValue) = Timer();
                     int isPredicted = Prediction(time,Convert.ToDouble(formValue),damage);
                     // Checks whatever prediction is non-predicted, normal or critical respectively.
@@ -100,6 +115,7 @@ namespace SE307Project
                     }// this is here for if there is no potion users don't have to use their turn
                     if (count == 0)
                     {
+                        Console.WriteLine("There is no potion in your inventory \n");
                         continue;
                     }
                     //Healing
@@ -140,9 +156,11 @@ namespace SE307Project
             if (HealthPoint <= 0)
             {
                 Console.WriteLine("Game Over");
-            }else if (monster.HealthPoint <= 0)
+            }
+            else if (monster.HealthPoint <= 0)
             {
                 isWon = true;
+                Cooldown = 0;
             }
             return isWon;
         }
