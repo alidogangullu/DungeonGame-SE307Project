@@ -193,7 +193,7 @@ namespace SE307Project
 
         public void StartGame()
         {
-            bool isExitPossible= false;
+            
             ChooseCharacter();
             // First we define level so that loading level number can work
             Level level = new Level();
@@ -271,7 +271,7 @@ namespace SE307Project
                         currentCharacter.ShowItemList();
                         break;
                     case 1:
-                        isExitPossible = level.Movement();
+                        var isExitPossible= level.Movement();
                         if (isExitPossible)
                         {
                             Console.WriteLine("You complete level " + Level.LevelNumber +

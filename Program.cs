@@ -55,15 +55,32 @@ namespace SE307Project
                             Console.WriteLine("User not found.");
                             input = -1;
                         }
-                        
                     }
-                    
                 }
 
             } while (input == -1 );
+
+            input = 0;
+            while (input != -1)
+            {
+                Console.WriteLine("Choose an action:");
+                Console.WriteLine("-1.Exit");
+                Console.WriteLine("1.Select a character");
+
+                input = Convert.ToInt32(Console.ReadLine());
+
+                switch (input)
+                {
+                    case 1:
+                        currentUser.StartGame();
+                        break;
+                    default:
+                        input = -1;
+                        break;
+                }
+                
+            }
             
-            
-            currentUser.StartGame();
             
         }
         public static void CreateUser()
