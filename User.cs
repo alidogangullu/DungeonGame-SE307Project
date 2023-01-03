@@ -229,7 +229,7 @@ namespace SE307Project
 
                 foreach (Item droppedItem in room.DroppedItems)
                 {
-                    Console.WriteLine(room.DroppedItems.IndexOf(droppedItem)+" "+droppedItem.Name);
+                    Console.WriteLine(droppedItem.Name);
                 }
 
                 Console.WriteLine("---------------------------------------------");
@@ -307,6 +307,10 @@ namespace SE307Project
                         break;
                     case 2:
                     {
+                        foreach (Item droppedItem in room.DroppedItems)
+                        {
+                            Console.WriteLine(room.DroppedItems.IndexOf(droppedItem)+" "+droppedItem.Name);
+                        }
                         Console.WriteLine("Enter an item index:");
 
                         try
