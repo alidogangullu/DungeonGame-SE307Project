@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace SE307Project
@@ -11,7 +10,7 @@ namespace SE307Project
     {
         public long ID { get; set; }
         private List<Character> CharacterList { get; set; }
-        public Character currentCharacter { get; set; }
+        public Character CurrentCharacter { get; set; }
         private List<int> ScoreList { get; set; }
         
         public User(long UserID)
@@ -119,18 +118,18 @@ namespace SE307Project
 
                         if (input != -1 && inputValid)
                         {
-                            currentCharacter = CharacterList[input];
-                            Console.WriteLine("You selected " + currentCharacter.GetType());
+                            CurrentCharacter = CharacterList[input];
+                            Console.WriteLine("You selected " + CurrentCharacter.GetType());
                             //Item class FactionType attribute configuration  
-                            if (currentCharacter.GetType() == typeof(Mage))
+                            if (CurrentCharacter.GetType() == typeof(Mage))
                             {
                                 Item.Faction = FactionType.Mage;
                             }
-                            else if (currentCharacter.GetType() == typeof(Archer))
+                            else if (CurrentCharacter.GetType() == typeof(Archer))
                             {
                                 Item.Faction = FactionType.Archer;
                             }
-                            else if (currentCharacter.GetType() == typeof(SwordsMan))
+                            else if (CurrentCharacter.GetType() == typeof(SwordsMan))
                             {
                                 Item.Faction = FactionType.Swordsman;
                             }
@@ -147,16 +146,16 @@ namespace SE307Project
         
         public void LoadGame()
         {
-            if (currentCharacter.lastCheckpointLvl > Level.LevelNumber)
+            if (CurrentCharacter.LastCheckpointLvl > Level.LevelNumber)
             {
-                Level.LevelNumber = currentCharacter.lastCheckpointLvl;
+                Level.LevelNumber = CurrentCharacter.LastCheckpointLvl;
             }
         }
 
         private void SaveGame()
         {
             //save last finished level's number
-            currentCharacter.lastCheckpointLvl = Level.LevelNumber;
+            CurrentCharacter.LastCheckpointLvl = Level.LevelNumber;
 
             // Open the file
             using FileStream fs = new FileStream(Directory.GetCurrentDirectory()+@"\users\"+ID + ".bin", FileMode.Create);
@@ -181,8 +180,8 @@ namespace SE307Project
         private void ThrowItems(DateTime genDate)
         {
             List<Item> items = new List<Item>();
-            items = currentCharacter.ItemList;
-            foreach (var item in currentCharacter.ItemList)
+            items = CurrentCharacter.ItemList;
+            foreach (var item in CurrentCharacter.ItemList)
             {
                 if (item.Date.CompareTo(genDate) > 0)
                 {
@@ -226,6 +225,8 @@ namespace SE307Project
                 {
                     Console.WriteLine(monster.Description(room.Monsters.IndexOf(monster)));
                 }
+                
+                Console.WriteLine(" ");
 
                 foreach (Item droppedItem in room.DroppedItems)
                 {
@@ -248,7 +249,7 @@ namespace SE307Project
                     Console.WriteLine("3. Attack");
                 }
                 
-                currentCharacter.Description();
+                CurrentCharacter.Description();
                 
                 wrongChoice:
                 Boolean inptValid = false;
@@ -268,7 +269,7 @@ namespace SE307Project
                 switch (choice)
                 {
                     case 0:
-                        currentCharacter.ShowItemList();
+                        CurrentCharacter.ShowItemList();
                         break;
                     case 1:
                         var isExitPossible= level.Movement();
@@ -317,13 +318,13 @@ namespace SE307Project
                         {
                             int itemNo = int.Parse(Console.ReadLine());
 
-                            if (currentCharacter.ItemList.Count >= currentCharacter.ItemList.Capacity)
+                            if (CurrentCharacter.ItemList.Count >= CurrentCharacter.ItemList.Capacity)
                             {
                                 Console.WriteLine("Full, you can not add this item!");
                             }
                             else
                             {
-                                currentCharacter.ItemList.Add(room.DroppedItems[itemNo]);
+                                CurrentCharacter.ItemList.Add(room.DroppedItems[itemNo]);
                                 room.DroppedItems.RemoveAt(itemNo);
                             }
                         }
@@ -349,7 +350,7 @@ namespace SE307Project
                         try
                         {
                             int mChoice = int.Parse(Console.ReadLine());
-                            bool isWon = currentCharacter.Attack(room.Monsters[mChoice]);
+                            bool isWon = CurrentCharacter.Attack(room.Monsters[mChoice]);
 
                             if (isWon)
                             {
@@ -387,7 +388,7 @@ namespace SE307Project
         public void Score()
         {
             int score = 0;
-            foreach (Item item in currentCharacter.ItemList)
+            foreach (Item item in CurrentCharacter.ItemList)
             {
                 score += item.Value;
             }

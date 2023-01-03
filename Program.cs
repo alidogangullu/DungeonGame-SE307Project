@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -10,9 +9,6 @@ namespace SE307Project
     {
         static void Main(string[] args)
         {
-            
-            //User temp = new User(0);
-            //we can call createUser, FindUser methods with using this temp.
             User currentUser = null;
             long input = 0;
             

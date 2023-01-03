@@ -74,23 +74,23 @@ namespace SE307Project
         {
             if (RoomList[CurrentCorridor][CurrentRoom].Left)
             {
-                Console.WriteLine("Go Left - A");
+                Console.WriteLine("Go Left Room - A");
                 
             }
 
             if (RoomList[CurrentCorridor][CurrentRoom].Right)
             {
-                Console.WriteLine("Go Right - D");
+                Console.WriteLine("Go Right Room - D");
             }
 
             if (RoomList[CurrentCorridor][CurrentRoom].corridorConnectionUp != -1)
             {
-                Console.WriteLine("Go Up - W");
+                Console.WriteLine("Go Upper Room - W");
             }
 
             if (RoomList[CurrentCorridor][CurrentRoom].corridorConnectionDown != -1)
             {
-                Console.WriteLine("Go Down - S");
+                Console.WriteLine("Go Lower Room - S");
             }
 
             int totalMonsterCount = 0;
@@ -104,13 +104,13 @@ namespace SE307Project
             if (totalMonsterCount == 0)
             {
                 Console.WriteLine("All monsters are killed in this level. Do you want to pass to new level? y or n");
-                String input = Console.ReadLine();
-                if (input.Equals("y"))
+                String input = Console.ReadLine().ToUpper();
+                if (input.Equals("Y"))
                 {
                     GenerateLevel();
                     return true;
                 }
-                else if (input.Equals("n"))
+                else if (input.Equals("N"))
                 {
                     return true;
                 }

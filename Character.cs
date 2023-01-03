@@ -15,11 +15,12 @@ namespace SE307Project
         protected int Cooldown { get; set; }
         public Weapon Weapon { get; set; }
         public Cloth Cloth { get; set; }
-        public int lastCheckpointLvl  { get; set ; }
-        public Character()
+        public int LastCheckpointLvl  { get; set ; }
+
+        protected Character()
         {
             ItemList = new List<Item>(10);
-            lastCheckpointLvl = 0;
+            LastCheckpointLvl = 0;
         }
 
         public abstract double CalculateHealthPoint();
@@ -104,29 +105,68 @@ namespace SE307Project
             Console.WriteLine("---Inventory---");
             foreach (Item item in ItemList)
             {
-                Console.WriteLine(ItemList.IndexOf(item) + "- " + item.Element +" "+item.Name);
+                Console.WriteLine(ItemList.IndexOf(item)+1 + "- " + item.Element +" "+item.Name);
             }
 
             Console.WriteLine(" ");
-            Console.WriteLine("Select an item or '-1' to quit");
-            int choice = Convert.ToInt32(Console.ReadLine());
+            Boolean inputValid = false;
+            while (!inputValid)
+            {
+                try
+                {
+                    Console.WriteLine("Select an item or '0' to drop item menu or '-1' to quit");
+                    int choice = Convert.ToInt32(Console.ReadLine());
 
-            if (choice == -1)
-            {
-                return;
+                    if (choice == -1)
+                    {
+                        return;
+                    }
+                    if (choice == 0)
+                    {
+                        Console.WriteLine("Select an item for dropping.");
+                        int selection = Convert.ToInt32(Console.ReadLine());
+
+                        if (selection <= 0 || selection > ItemList.Count)
+                        {
+                            throw new ArgumentOutOfRangeException();
+                        }
+
+                        ItemList.RemoveAt(selection-1);
+                        inputValid = true;
+                    }
+                    else if (choice > 0 && choice <= ItemList.Count)
+                    {
+                        if (ItemList[choice-1].GetType() == typeof(Weapon))
+                        {
+                            ItemList.Add(Weapon);
+                            Weapon = ItemList[choice-1] as Weapon;
+                        }
+                        else if (ItemList[choice-1].GetType() == typeof(Cloth))
+                        {
+                            ItemList.Add(Cloth);
+                            Cloth = ItemList[choice-1] as Cloth;
+                        }
+                        
+                        inputValid = true;
+                    }
+                    else
+                    {
+                        throw new ArgumentOutOfRangeException();
+                    }
+
+                    break;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Invalid input. Please enter a valid number.");
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    Console.WriteLine("Invalid selection. Please enter a valid item number.");
+                }
             }
-            if (ItemList[choice].GetType() == typeof(Weapon))
-            {
-                ItemList.Add(this.Weapon);
-                this.Weapon = ItemList[choice] as Weapon;
-            }
+
             
-            
-            else if (ItemList[choice].GetType() == typeof(Cloth))
-            {
-                ItemList.Add(this.Cloth);
-                this.Cloth = ItemList[choice] as Cloth;
-            }
             
         }
 
