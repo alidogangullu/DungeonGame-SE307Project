@@ -104,7 +104,7 @@ namespace SE307Project
             Console.WriteLine("---Inventory---");
             foreach (Item item in ItemList)
             {
-                Console.WriteLine(ItemList.IndexOf(item) + "- " + item.Name);
+                Console.WriteLine(ItemList.IndexOf(item) + "- " + item.Element +" "+item.Name);
             }
 
             Console.WriteLine(" ");
