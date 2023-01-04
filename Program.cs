@@ -97,7 +97,7 @@ namespace SE307Project
                                           "In attack phase you have to calculate the damage which is going to be happen.\n" +
                                           " If you want to make an critical attack you should predict around exact value +-0.5 in 5 seconds.\n" +
                                           " If you want your attack to reach its exact value you should predict around +-1\n"+
-                        "Each time you are collecting items which have certain value. At the level's end you can see on the screen your score");
+                        "Each time you are collecting items which have certain value. When you exit the game, you can see on the screen your score");
                         break;
                     default:
                         input = -1;

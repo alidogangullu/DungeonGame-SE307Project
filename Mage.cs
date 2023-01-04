@@ -120,7 +120,7 @@ namespace SE307Project
                         continue;
                     }
                     //Healing
-                    Console.WriteLine("Which one are you want to choose ?");
+                    Console.WriteLine("Which one do you want to choose ?");
                     try
                     {
                         var pChoice = Convert.ToInt32(Console.ReadLine());
